@@ -12,7 +12,7 @@ server = SONAR63
 ORGANIZATION = "default-organization"
 
 def fetch_sonar_data(output_path):
-    metrics = Metrics(server, ORGANIZATION, output_path)
+    metrics = Metrics(server, output_path)
     metrics_list = metrics.get_metrics()
 
     prj = Projects(server, ORGANIZATION, output_path)

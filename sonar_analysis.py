@@ -6,12 +6,10 @@ from route_config import RequestsConfig
 from response_utils import ResponseUtils
 from common import Common
 
-
 class Analysis(SonarObjectInterface, Common):
     def __init__(self, server, output_path, project_key):
         Common.__init__(self)
-        self.__server = server
-        self.__endpoint = self.__server + "api/project_analyses/search"
+        self.__endpoint = server + "api/project_analyses/search"
         self.__iter = 1
         self.__page_size = 100
         self.__params = {

@@ -5,13 +5,10 @@ from route_config import RequestsConfig
 from response_utils import ResponseUtils
 from common import Common
 
-
 class Metrics(SonarObjectInterface, Common):
-    def __init__(self, server, organization, output_path):
+    def __init__(self, server, output_path):
         Common.__init__(self)
-        self.__server = server
-        self.__endpoint = self.__server + "api/metrics/search"
-        self.__organization = organization
+        self.__endpoint = server + "api/metrics/search"
         self.__page_size = 100
         self.__params = {
             'p': 1,

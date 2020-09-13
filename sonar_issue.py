@@ -9,12 +9,11 @@ from route_config import RequestsConfig
 from response_utils import ResponseUtils
 from common import Common
 
-
 class Issues(SonarObjectInterface, Common):
     def __init__(self, server, output_path, project_key, analyses):
         Common.__init__(self)
-        self.__server = server
-        self.__endpoint = self.__server + "api/issues/search"
+
+        self.__endpoint = server + "api/issues/search"
         self.__page_size = 500
         self.__project_key = project_key
         self.__params = {

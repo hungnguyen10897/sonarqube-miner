@@ -13,8 +13,8 @@ from common import Common
 class Measures(SonarObjectInterface, Common):
     def __init__(self, server, output_path, project_key, analyses, measures_type):
         Common.__init__(self)
-        self.__server = server
-        self.__endpoint = self.__server + "api/measures/search_history"
+
+        self.__endpoint = server + "api/measures/search_history"
         self.__page_size = 1000
         self.__metrics_params = []
         self.__params = {

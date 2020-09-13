@@ -6,17 +6,15 @@ from response_utils import ResponseUtils
 
 class Projects(SonarObjectInterface):
     def __init__(self, server, organization, output_path):
-        self.__server = server
-        self.__endpoint = self.__server + "api/components/search"
-        self.__organization = organization
-        self.__qualifiers = 'TRK'
+
+        self.__endpoint = server + "api/components/search"
         self.__iter = 1
         self.__page_size = 100
         self.__params = {
             'p': self.__iter,
             'ps': self.__page_size,
-            'organization': self.__organization,
-            'qualifiers': self.__qualifiers
+            'organization': organization,
+            'qualifiers': 'TRK'
         }
         self.__project_list = []
         self.__total_num_projects = 0
