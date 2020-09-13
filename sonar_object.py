@@ -1,4 +1,4 @@
-class Interface:
+class SonarObjectInterface:
     def __do_search(self):
         pass
 

@@ -1,13 +1,13 @@
 from collections import OrderedDict
 import pandas as pd
 from pathlib import Path
-from Interface import Interface
-from RouteConfig import RequestsConfig
-from ResponseUtils import ResponseUtils
+from sonar_object import SonarObjectInterface
+from route_config import RequestsConfig
+from response_utils import ResponseUtils
 from common import Common
 
 
-class Analysis(Interface, Common):
+class Analysis(SonarObjectInterface, Common):
     def __init__(self, server, output_path, project_key):
         Common.__init__(self)
         self.__server = server

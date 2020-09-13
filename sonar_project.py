@@ -1,11 +1,10 @@
 import pandas as pd
 from pathlib import Path
-from Interface import Interface
-from RouteConfig import RequestsConfig
-from ResponseUtils import ResponseUtils
+from sonar_object import SonarObjectInterface
+from route_config import RequestsConfig
+from response_utils import ResponseUtils
 
-
-class Projects(Interface):
+class Projects(SonarObjectInterface):
     def __init__(self, server, organization, output_path):
         self.__server = server
         self.__endpoint = self.__server + "api/components/search"
@@ -74,5 +73,3 @@ class Projects(Interface):
         self.__do_search()
         self.__write_into_csv()
         return self.__project_list
-
-

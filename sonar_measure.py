@@ -5,13 +5,12 @@ import sys
 import csv
 from datetime import datetime
 from pathlib import Path
-from Interface import Interface
-from RouteConfig import RequestsConfig
-from ResponseUtils import ResponseUtils
+from sonar_object import SonarObjectInterface
+from route_config import RequestsConfig
+from response_utils  import ResponseUtils
 from common import Common
 
-
-class Measures(Interface, Common):
+class Measures(SonarObjectInterface, Common):
     def __init__(self, server, output_path, project_key, analyses, measures_type):
         Common.__init__(self)
         self.__server = server

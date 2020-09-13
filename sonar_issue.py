@@ -4,13 +4,13 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import numpy as np
 import sys
-from Interface import Interface
-from RouteConfig import RequestsConfig
-from ResponseUtils import ResponseUtils
+from sonar_object import SonarObjectInterface
+from route_config import RequestsConfig
+from response_utils import ResponseUtils
 from common import Common
 
 
-class Issues(Interface, Common):
+class Issues(SonarObjectInterface, Common):
     def __init__(self, server, output_path, project_key, analyses):
         Common.__init__(self)
         self.__server = server

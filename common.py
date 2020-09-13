@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from collections import OrderedDict
 
-
 class Common:
     TYPE_CONVERSION = {}
 

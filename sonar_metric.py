@@ -1,12 +1,12 @@
 import pandas as pd
 from pathlib import Path
-from Interface import Interface
-from RouteConfig import RequestsConfig
-from ResponseUtils import ResponseUtils
+from sonar_object import SonarObjectInterface
+from route_config import RequestsConfig
+from response_utils import ResponseUtils
 from common import Common
 
 
-class Metrics(Interface, Common):
+class Metrics(SonarObjectInterface, Common):
     def __init__(self, server, organization, output_path):
         Common.__init__(self)
         self.__server = server
