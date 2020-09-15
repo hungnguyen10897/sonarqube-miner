@@ -14,7 +14,7 @@ ORGANIZATION = "default-organization"
 def fetch_sonar_data(output_path):
 
     prj = Projects(server, ORGANIZATION, output_path)
-    projects = prj.process_projects()
+    projects = prj.process_elements()
     projects.sort(key=lambda x: x['key'])
 
     print("Total: {0} projects.".format(len(projects)))

@@ -17,7 +17,7 @@ class Projects(SonarObject):
             output_path = output_path
         )
 
-    def __write_to_csv(self):
+    def _write_to_csv(self):
         projects = []
         for project in self._element_list:
             project_var = (project.values())
@@ -30,8 +30,3 @@ class Projects(SonarObject):
             file_path = output_path.joinpath("projects.csv")
             df = pd.DataFrame(data=projects, columns=headers)
             df.to_csv(file_path, index=False, header=True)
-
-    def process_projects(self):
-        super()._query_server()
-        self.__write_to_csv()
-        return self._element_list

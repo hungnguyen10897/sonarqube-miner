@@ -16,7 +16,7 @@ class SonarObject:
         return self.__route_config.call_api_route(session=self.__session, endpoint=self.__endpoint,
                                             params=self.__params)
 
-    def _query_server(self):
+    def __query_server(self):
         response = self.__call_the_api()
         if not self.__route_config.check_invalid_status_code(response=response):
             return []
@@ -27,7 +27,7 @@ class SonarObject:
 
         if self.__more_elements():
             self.__params['p'] = self.__params['p'] + 1
-            self._element_list = self._element_list + self._query_server()
+            self._element_list = self._element_list + self.__query_server()
 
         return self._element_list
     
@@ -36,5 +36,10 @@ class SonarObject:
             return True
         return False
 
-    def __write_to_csv(self):
+    def _write_to_csv(self):
         pass
+
+    def process_elements(self):
+        self.__query_server()
+        self._write_to_csv()
+        return self._element_list
