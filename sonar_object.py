@@ -16,18 +16,22 @@ class SonarObject:
         return self.__route_config.call_api_route(session=self.__session, endpoint=self.__endpoint,
                                             params=self.__params)
 
-    def __query_server(self):
+    def _query_server(self, key):
         response = self.__call_the_api()
         if not self.__route_config.check_invalid_status_code(response=response):
             return []
         response_dict = response.json()
 
-        self._element_list = response_dict['components']
-        self.__total_num_elements = response_dict['paging']['total']
+        self._element_list = response_dict[key]
+
+        if key == "metrics":
+            self.__total_num_elements = response_dict['total']
+        else:
+            self.__total_num_elements = response_dict['paging']['total']
 
         if self.__more_elements():
             self.__params['p'] = self.__params['p'] + 1
-            self._element_list = self._element_list + self.__query_server()
+            self._element_list = self._element_list + self._query_server(key)
 
         return self._element_list
     
@@ -36,10 +40,8 @@ class SonarObject:
             return True
         return False
 
-    def _write_to_csv(self):
+    def _write_csv(self):
         pass
 
     def process_elements(self):
-        self.__query_server()
-        self._write_to_csv()
-        return self._element_list
+        pass

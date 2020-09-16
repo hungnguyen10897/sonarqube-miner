@@ -1,62 +1,48 @@
 import pandas as pd
 from pathlib import Path
-from sonar_object import SonarObjectInterface
+from sonar_object import SonarObject
 from route_config import RequestsConfig
-from response_utils import ResponseUtils
-from common import Common
+from collections import OrderedDict
 
-class Metrics(SonarObjectInterface, Common):
+TYPE_CONVERSION = {
+    "INT": "Int64",
+    "FLOAT": 'float64',
+    "DISTRIB": 'object',
+    "PERCENT": 'float64',
+    "MILLISEC": 'float64',
+    "DATA": 'object',
+    "BOOL": 'bool',
+    "STRING": 'object',
+    "WORK_DUR": 'float64',
+    "RATING": 'float64',
+    "LEVEL": 'float64'
+}
+
+class Metrics(SonarObject):
+
     def __init__(self, server, output_path):
-        Common.__init__(self)
-        self.__endpoint = server + "api/metrics/search"
-        self.__page_size = 100
-        self.__params = {
-            'p': 1,
-            'ps': self.__page_size,
-        }
-        self.__metrics_list = []
-        self.__total_num_metrics = 0
-        self.__response = {}
+        SonarObject.__init__(
+            self,
+            endpoint = server + "api/metrics/search",
+            params =    {
+                'p': 1,     # page/iteration
+                'ps': 100,  # pageSize
+            },
+            output_path = output_path
+        )
 
-        self.__route_config = RequestsConfig()
-        self.__session = self.__route_config.route_session()
-        self.__output_path = output_path
+        self.__sonar_metrics_dtype = OrderedDict({
+            'project': 'object',
+            'analysis_key': 'object',
+        })
 
-    def __format_response(self):
-        r_dict = self.__response.json()
-        return r_dict
-
-    def __call_the_api(self):
-        return self.__route_config.call_api_route(session=self.__session, endpoint=self.__endpoint,
-                                                  params=self.__params)
-
-    def __check_num_of_elements(self):
-        result = ResponseUtils.check_num_of_elements({
-            'iter': self.__params['p'],
-            'page_size': self.__page_size,
-            'total_num_elements': self.__total_num_metrics})
-        return result
-
-    def __do_search(self):
-        response = self.__call_the_api()
-        if not self.__route_config.check_invalid_status_code(response=response):
-            return []
-        self.__response = response
-        response_dict = self.__format_response()
-        self.__metrics_list = response_dict['metrics']
-        self.__total_num_metrics = response_dict['total']
-        if self.__check_num_of_elements():
-            self.__params['p'] = self.__params['p'] + 1
-            self.__metrics_list = self.__metrics_list + self.__do_search()
-        return self.__metrics_list
-
-    def __write_into_csv(self):
+    def _write_csv(self):
         metrics = []
-        self.__metrics_list.sort(key=lambda x: ('None' if 'domain' not in x else x['domain'], int(x['id'])))
-        for metric in self.__metrics_list:
+        self._element_list.sort(key=lambda x: ('None' if 'domain' not in x else x['domain'], int(x['id'])))
+        for metric in self._element_list:
             if metric == 'sonarjava_feedback':
                 continue
-            self.SONAR_MEASURES_TYPE[metric['key']] = self.TYPE_CONVERSION[metric['type']]
+            self.__sonar_metrics_dtype[metric['key']] = TYPE_CONVERSION[metric['type']]
             metric = ('No Domain' if 'domain' not in metric else metric['domain'],
                       'No Key' if 'key' not in metric else metric['key'],
                       'No Type' if 'type' not in metric else metric['type'],
@@ -66,13 +52,13 @@ class Metrics(SonarObjectInterface, Common):
 
         if metrics:
             headers = ['domain', 'key', 'type', 'description']
-            output_path = Path(self.__output_path).joinpath("metrics")
+            output_path = Path(self._output_path).joinpath("metrics")
             output_path.mkdir(parents=True, exist_ok=True)
             file_path = output_path.joinpath("metrics.csv")
             df = pd.DataFrame(data=metrics, columns=headers)
             df.to_csv(file_path, index=False, header=True)
 
-    def get_metrics(self):
-        self.__do_search()
-        self.__write_into_csv()
-        return self.SONAR_MEASURES_TYPE
+    def process_elements(self):
+        self._query_server(key = "metrics")
+        self._write_csv()
+        return self.__sonar_metrics_dtype
