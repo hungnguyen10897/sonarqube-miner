@@ -94,7 +94,7 @@ class Measures(SonarObject):
     # Different implementation from superclass method at line
     # meansures = concat_meansures(meansires, self._query_server)
     def _query_server(self):
-        response = self._call_the_api()
+        response = self._call_api()
         if not self._route_config.check_invalid_status_code(response=response):
             return []
 

@@ -12,12 +12,12 @@ class SonarObject:
         self.__session = self._route_config.route_session()
         self._output_path = output_path
     
-    def _call_the_api(self):
+    def _call_api(self):
         return self._route_config.call_api_route(session=self.__session, endpoint=self.__endpoint,
                                             params=self._params)
 
     def _query_server(self, key):
-        response = self._call_the_api()
+        response = self._call_api()
         if not self._route_config.check_invalid_status_code(response=response):
             return []
         response_dict = response.json()

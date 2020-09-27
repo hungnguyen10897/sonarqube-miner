@@ -3,7 +3,7 @@ from sonar_project import Projects
 from sonar_metric import Metrics
 from sonar_analysis import Analysis
 from sonar_measure import Measures
-# from sonar_issue import Issues
+from sonar_issue import Issues
 
 COURSE_SERVER = "https://course-sonar.rd.tuni.fi/"
 SONAR63 = "http://sonar63.rd.tut.fi/"
@@ -25,16 +25,19 @@ def fetch_sonar_data(output_path):
         # print(f'{project["name"]} ', end = "")
         analysis = Analysis(server, output_path, project['key'])
         analysis.process_elements()
-        analysis_keys = analysis.get_analysis_keys()
+        analysis_keys_dates = analysis.get_analysis_keys_dates()    # (keys, dates) tuple 
 
-        if len(analysis_keys) == 0:
+        if len(analysis_keys_dates[0]) == 0:
             continue
 
-        print(f"{len(analysis_keys)} analyses.")
+        print(f"{len(analysis_keys_dates[0])} analyses.")
 
-        measure = Measures(SONAR63, project_key=project['key'], output_path=output_path,  analysis_keys=analysis_keys)
-        measure.process_elements()
+        # measure = Measures(SONAR63, output_path, project['key'], analysis_keys_dates[0])
+        # measure.process_elements()
 
+        issues = Issues(SONAR63, output_path, project['key'], analysis_keys_dates)
+        issues.get_issues()
+        print('{0} issues completed'.format(project['name']))
         
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
