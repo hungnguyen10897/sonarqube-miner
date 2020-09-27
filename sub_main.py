@@ -2,7 +2,7 @@ import argparse
 from sonar_project import Projects
 from sonar_metric import Metrics
 from sonar_analysis import Analysis
-# from sonar_measure import Measures
+from sonar_measure import Measures
 # from sonar_issue import Issues
 
 COURSE_SERVER = "https://course-sonar.rd.tuni.fi/"
@@ -12,27 +12,29 @@ server = SONAR63
 ORGANIZATION = "default-organization"
 
 def fetch_sonar_data(output_path):
+    # Run only once
     metrics = Metrics(server, output_path)
-    metrics_list = metrics.process_elements()
-    for key,val in metrics_list.items():
-        print(f"{key} - {val}")
+    metrics.process_elements()
 
     prj = Projects(server, ORGANIZATION, output_path)
     projects = prj.process_elements()
     projects.sort(key=lambda x: x['key'])
 
     print("Total: {0} projects.".format(len(projects)))
-    for project in projects:
-        #print('{0} starts'.format(project['name']))
+    for project in projects[:10]:
+        # print(f'{project["name"]} ', end = "")
         analysis = Analysis(server, output_path, project['key'])
-        analyses = analysis.get_analyses()
-        #print('{0} analysis completed'.format(project['name']))
+        analysis.process_elements()
+        analysis_keys = analysis.get_analysis_keys()
 
-        if analyses is None:
+        if len(analysis_keys) == 0:
             continue
-        
-        for a in analyses:
-            print(a)
+
+        print(f"{len(analysis_keys)} analyses.")
+
+        measure = Measures(SONAR63, project_key=project['key'], output_path=output_path,  analysis_keys=analysis_keys)
+        measure.process_elements()
+
         
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()

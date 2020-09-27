@@ -31,18 +31,14 @@ class Metrics(SonarObject):
             output_path = output_path
         )
 
-        self.__sonar_metrics_dtype = OrderedDict({
-            'project': 'object',
-            'analysis_key': 'object',
-        })
-
     def _write_csv(self):
+
         metrics = []
         self._element_list.sort(key=lambda x: ('None' if 'domain' not in x else x['domain'], int(x['id'])))
         for metric in self._element_list:
             if metric == 'sonarjava_feedback':
                 continue
-            self.__sonar_metrics_dtype[metric['key']] = TYPE_CONVERSION[metric['type']]
+
             metric = ('No Domain' if 'domain' not in metric else metric['domain'],
                       'No Key' if 'key' not in metric else metric['key'],
                       'No Type' if 'type' not in metric else metric['type'],
@@ -61,4 +57,3 @@ class Metrics(SonarObject):
     def process_elements(self):
         self._query_server(key = "metrics")
         self._write_csv()
-        return self.__sonar_metrics_dtype
