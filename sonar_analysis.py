@@ -26,6 +26,7 @@ class Analysis(SonarObject):
             output_path = output_path
         )
         self.__project_key = project_key
+        self.__analysis_keys = []           # to return, different from element_list
 
     def _write_csv(self):
         analysis_list = []
@@ -48,10 +49,12 @@ class Analysis(SonarObject):
 
             df = pd.DataFrame(data=analysis_list, columns=list(SONAR_ANALYSES_TYPE.keys()))
             df.to_csv(file_path, index=False, header=True)
-            return df
-        return None
+            self.__analysis_keys = df['analysis_key'].values.tolist()
 
-    def get_analyses(self):
+    def process_elements(self):
         self._query_server(key = 'analyses')
-        result = self._write_csv()
-        return result
+        self._write_csv()
+
+    def get_analysis_keys(self):
+        return self.__analysis_keys
+

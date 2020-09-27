@@ -29,13 +29,13 @@ class SonarObject:
         else:
             self.__total_num_elements = response_dict['paging']['total']
 
-        if self.__more_elements():
+        if self._more_elements():
             self.__params['p'] = self.__params['p'] + 1
             self._element_list = self._element_list + self._query_server(key)
 
         return self._element_list
     
-    def __more_elements(self):
+    def _more_elements(self):
         if self.__params['p'] * self.__params['ps'] < self.__total_num_elements:
             return True
         return False
