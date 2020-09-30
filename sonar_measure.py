@@ -94,11 +94,10 @@ class Measures(SonarObject):
     # Different implementation from superclass method at line
     # meansures = concat_meansures(meansires, self._query_server)
     def _query_server(self):
-        response = self._call_api()
-        if not self._route_config.check_invalid_status_code(response=response):
-            return []
-
-        response_dict = response.json()
+        response_dict = self._call_api()
+        if response_dict is None:
+            []
+        
         measures = response_dict["measures"]
         self.__total_num_measures = response_dict['paging']['total']
 

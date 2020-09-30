@@ -5,7 +5,7 @@ class SonarObject:
         self.__endpoint = endpoint
         self._params = params
         self._element_list = []
-        self.__total_num_elements = 0
+        self._total_num_elements = 0
         self.__response = {}
 
         self._route_config = RequestsConfig()
@@ -13,21 +13,22 @@ class SonarObject:
         self._output_path = output_path
     
     def _call_api(self):
-        return self._route_config.call_api_route(session=self.__session, endpoint=self.__endpoint,
-                                            params=self._params)
+        response = self._route_config.call_api_route(session=self.__session, endpoint=self.__endpoint, params=self._params)
+        if not self._route_config.check_invalid_status_code(response=response):
+            return None
+        return response.json()
 
     def _query_server(self, key):
-        response = self._call_api()
-        if not self._route_config.check_invalid_status_code(response=response):
-            return []
-        response_dict = response.json()
-
+        response_dict = self._call_api()
+        if response_dict is None:
+            return
+            
         self._element_list = response_dict[key]
 
         if key == "metrics":
-            self.__total_num_elements = response_dict['total']
+            self._total_num_elements = response_dict['total']
         else:
-            self.__total_num_elements = response_dict['paging']['total']
+            self._total_num_elements = response_dict['paging']['total']
 
         if self._more_elements():
             self._params['p'] = self._params['p'] + 1
@@ -36,7 +37,7 @@ class SonarObject:
         return self._element_list
     
     def _more_elements(self):
-        if self._params['p'] * self._params['ps'] < self.__total_num_elements:
+        if self._params['p'] * self._params['ps'] < self._total_num_elements:
             return True
         return False
 

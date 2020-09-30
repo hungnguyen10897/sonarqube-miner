@@ -36,7 +36,7 @@ def fetch_sonar_data(output_path):
         # measure.process_elements()
 
         issues = Issues(SONAR63, output_path, project['key'], analysis_keys_dates)
-        issues.get_issues()
+        issues.process_elements()
         print('{0} issues completed'.format(project['name']))
         
 if __name__ == '__main__':
