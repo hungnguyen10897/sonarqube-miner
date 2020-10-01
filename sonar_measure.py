@@ -170,7 +170,7 @@ class Measures(SonarObject):
         file_path = output_path.joinpath(f"{self.__file_name}_staging.csv")
 
         df = pd.DataFrame(data=self.__data, columns=self.__columns)
-        df.to_csv(file_path, index=False, header=True)
+        df.to_csv(file_path, index=False, header=True, mode='w')
 
     def __metric_wise_search(self):
         all_metrics_order_type = read_all_metrics()

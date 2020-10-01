@@ -29,7 +29,7 @@ class Projects(SonarObject):
             output_path.mkdir(parents=True, exist_ok=True)
             file_path = output_path.joinpath("projects.csv")
             df = pd.DataFrame(data=projects, columns=headers)
-            df.to_csv(file_path, index=False, header=True)
+            df.to_csv(file_path, index=False, header=True, mode='w')
 
     def process_elements(self):
         self._query_server(key = "components")

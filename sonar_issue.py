@@ -232,7 +232,7 @@ class Issues(SonarObject):
             "effort": "Int64",
             "debt": "Int64"
         })
-        df.to_csv(file_path, index=False, header=True)
+        df.to_csv(file_path, index=False, header=True, mode='w')
 
     def process_elements(self):
         self._query_server()

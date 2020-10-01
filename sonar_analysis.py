@@ -51,7 +51,7 @@ class Analysis(SonarObject):
             file_path = output_path.joinpath(f"{self.__file_name}_staging.csv")
 
             df = pd.DataFrame(data=analysis_list, columns=list(SONAR_ANALYSES_DTYPE.keys()))
-            df.to_csv(file_path, index=False, header=True)
+            df.to_csv(file_path, index=False, header=True, mode='w')
             self.__analysis_keys = df['analysis_key'].values.tolist()
             self.__analysis_dates = df['date'].values
 
