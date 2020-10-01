@@ -13,7 +13,7 @@ server = SONARCLOUD
 organization = "default-organization" if server != SONARCLOUD else "apache"
 
 def fetch_sonar_data(output_path):
-    # Run only once
+
     metrics = Metrics(server, output_path)
     metrics.process_elements()
     server_metrics = metrics.get_server_metrics()
@@ -22,24 +22,24 @@ def fetch_sonar_data(output_path):
     projects = prj.process_elements()
     projects.sort(key=lambda x: x['key'])
 
-    print("Total: {0} projects.".format(len(projects)))
-    for project in projects[:10]:
-        # print(f'{project["name"]} ', end = "")
+    print(f"Total {len(projects)} projects.")
+    i = 0
+    for project in projects:
+        print(f'{i}. {project["name"]}:')
+        i += 1
         analysis = Analysis(server, output_path, project['key'])
         analysis.process_elements()
         analysis_keys_dates = analysis.get_analysis_keys_dates()    # (keys, dates) tuple 
 
         if len(analysis_keys_dates[0]) == 0:
             continue
-
-        print(f"{len(analysis_keys_dates[0])} analyses.")
+        print(f"\t{len(analysis_keys_dates[0])} new analyses")
 
         measure = Measures(server, output_path, project['key'], analysis_keys_dates[0], server_metrics)
         measure.process_elements()
 
         issues = Issues(server, output_path, project['key'], analysis_keys_dates)
         issues.process_elements()
-        print('{0} issues completed'.format(project['name']))
         
 if __name__ == '__main__':
 
@@ -50,5 +50,3 @@ if __name__ == '__main__':
     output_path = args['output_path']
 
     fetch_sonar_data(output_path)
-
-    print("Finish")

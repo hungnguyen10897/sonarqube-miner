@@ -225,6 +225,8 @@ class Issues(SonarObject):
                         component, start_line, end_line, start_offset, end_offset, hash_value, from_hotspot)
             issues.append(issue)
 
+        print(f"\t{len(issues)} new issues")
+
         df = pd.DataFrame(data=issues, columns=SONAR_ISSUES_TYPE.keys())
         df = df.astype({
             "effort": "Int64",
