@@ -2,9 +2,9 @@ from collections import OrderedDict
 import pandas as pd
 from pathlib import Path
 from sonar_object import SonarObject
-from utils import process_datetime
+from utils import process_datetime, get_proper_file_name
 
-SONAR_ANALYSES_TYPE = OrderedDict({
+SONAR_ANALYSES_DTYPE = OrderedDict({
         "project": "object",
         "analysis_key": "object",
         "date": "object",
@@ -21,13 +21,16 @@ class Analysis(SonarObject):
             params =    {
                 'p': 1,     # page/iteration
                 'ps': 100,  # pageSize
-                'project': project_key
+                'project': project_key,
+                'from' : None,
             },
             output_path = output_path
         )
         self.__project_key = project_key
         self.__analysis_keys = []           # to return, different from element_list
         self.__analysis_dates = []          # to return, different from element_list
+        self.__latest_ts = None
+        self.__file_name = get_proper_file_name(self.__project_key)
 
     def _write_csv(self):
         analysis_list = []
@@ -45,18 +48,35 @@ class Analysis(SonarObject):
             output_path = Path(self._output_path).joinpath("analysis")
             output_path.mkdir(parents=True, exist_ok=True)
 
-            file_name = self.__project_key.replace(' ', '_').replace(':', '_')
-            file_path = output_path.joinpath(f"{file_name}.csv")
+            file_path = output_path.joinpath(f"{self.__file_name}_staging.csv")
 
-            df = pd.DataFrame(data=analysis_list, columns=list(SONAR_ANALYSES_TYPE.keys()))
+            df = pd.DataFrame(data=analysis_list, columns=list(SONAR_ANALYSES_DTYPE.keys()))
             df.to_csv(file_path, index=False, header=True)
             self.__analysis_keys = df['analysis_key'].values.tolist()
             self.__analysis_dates = df['date'].values
 
+    # Try to read latest timestamp recorded to get only later analyses
+    def __prepare_anlysis_query(self):
+        output_path = Path(self._output_path).joinpath("analysis")
+        output_path.mkdir(parents=True, exist_ok=True)
+            
+        archive_file = output_path.joinpath(f"{self.__file_name}.csv")
+
+        latest_ts = None
+        if archive_file.exists():
+            try:
+                old_df = pd.read_csv(archive_file.absolute(), dtype=SONAR_ANALYSES_DTYPE, parse_dates=['date'])
+                latest_ts = old_df['date'].max()
+                latest_ts_str = latest_ts.strftime(format = '%Y-%m-%d')
+                self._params['from'] = latest_ts.strftime(format = latest_ts_str)
+
+            except Exception as e:
+                print(f"\t\tERROR: {e} when parsing {archive_file} into DataFrame.")
+        
     def process_elements(self):
+        self.__prepare_anlysis_query()
         self._query_server(key = 'analyses')
         self._write_csv()
 
     def get_analysis_keys_dates(self):
         return (self.__analysis_keys, self.__analysis_dates)
-

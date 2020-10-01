@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-import sys
+import sys, re
 
 def process_datetime(time_str):
     if time_str is None:
@@ -40,3 +40,7 @@ def get_duration_from_str(input_str):
 
         print("ERROR: duration string '{0}' does not contain 'min', 'h' or 'd'.".format(input_str))
         sys.exit(1)
+
+def get_proper_file_name(origin):
+    p = re.compile("[^0-9a-z-_]")
+    return p.sub('_', origin.lower())
