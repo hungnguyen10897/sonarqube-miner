@@ -1,0 +1,241 @@
+26 - Complexity - complexity - INT - Cyclomatic complexity
+27 - Complexity - class_complexity - FLOAT - Complexity average by class
+28 - Complexity - function_complexity - FLOAT - Complexity average by function
+38 - Complexity - file_complexity - FLOAT - Complexity average by file
+59 - Complexity - function_complexity_distribution - DISTRIB - Functions distribution /complexity
+154 - Complexity - file_complexity_distribution - DISTRIB - Files distribution /complexity
+272 - Complexity - complexity_in_classes - INT - Cyclomatic complexity in classes
+273 - Complexity - complexity_in_functions - INT - Cyclomatic complexity in functions
+347 - Complexity - cognitive_complexity - INT - Cognitive complexity
+1000 - Complexity - fat_method - INT - Fat Method Description
+1001 - Complexity - tangle_design - PERCENT - Tangle Design Description
+1002 - Complexity - class_complexity_distribution - DISTRIB - Classes distribution /complexity
+1003 - Complexity - xs - INT - Total XS
+1004 - Complexity - xs_percent - PERCENT - Total XS in percent
+1005 - Complexity - fat_leaf_package - INT - Fat Leaf Package Description
+1006 - Complexity - fat_class - INT - Fat Class Description
+1007 - Complexity - fat_design - INT - Fat Design Description
+10 - Coverage - test_errors - INT - Number of unit test errors
+11 - Coverage - skipped_tests - INT - Number of skipped unit tests
+12 - Coverage - test_failures - INT - Number of unit test failures
+13 - Coverage - tests - INT - Number of unit tests
+14 - Coverage - test_execution_time - MILLISEC - Execution duration of unit tests
+15 - Coverage - test_success_density - PERCENT - Density of successful unit tests
+20 - Coverage - coverage - PERCENT - Coverage by tests
+92 - Coverage - lines_to_cover - INT - Lines to cover
+93 - Coverage - uncovered_lines - INT - Uncovered lines
+94 - Coverage - line_coverage - PERCENT - Line coverage
+95 - Coverage - conditions_to_cover - INT - Conditions to cover
+96 - Coverage - uncovered_conditions - INT - Uncovered conditions
+97 - Coverage - branch_coverage - PERCENT - Condition coverage
+172 - Coverage - new_coverage - PERCENT - Coverage of new/changed code
+173 - Coverage - new_lines_to_cover - INT - Lines to cover on new code
+174 - Coverage - new_uncovered_lines - INT - Uncovered lines on new code
+175 - Coverage - new_line_coverage - PERCENT - Line coverage of added/changed code
+176 - Coverage - new_conditions_to_cover - INT - Conditions to cover on new code
+177 - Coverage - new_uncovered_conditions - INT - Uncovered conditions on new code
+178 - Coverage - new_branch_coverage - PERCENT - Condition coverage of new/changed code
+321 - Coverage - executable_lines_data - DATA - No Description
+1008 - Coverage - it_conditions_to_cover - INT - Integration Tests conditions to cover
+1009 - Coverage - it_uncovered_lines - INT - Uncovered lines by integration tests
+1010 - Coverage - overall_coverage_line_hits_data - DATA - Coverage hits by all tests and by line
+1011 - Coverage - overall_line_coverage - PERCENT - Line coverage by all tests
+1012 - Coverage - new_overall_uncovered_lines - INT - New lines that are not covered by any tests
+1013 - Coverage - it_line_coverage - PERCENT - Line coverage by integration tests
+1014 - Coverage - it_conditions_by_line - DATA - IT conditions by line
+1015 - Coverage - it_coverage - PERCENT - Integration tests coverage
+1016 - Coverage - new_overall_coverage - PERCENT - Overall coverage of new/changed code
+1017 - Coverage - new_it_uncovered_conditions - INT - New conditions that are not covered by integration tests
+1018 - Coverage - new_it_uncovered_lines - INT - New lines that are not covered by integration tests
+1019 - Coverage - new_it_lines_to_cover - INT - Lines to cover on new code by integration tests
+1020 - Coverage - new_it_line_coverage - PERCENT - Integration tests line coverage of added/changed code
+1021 - Coverage - overall_uncovered_conditions - INT - Uncovered conditions by all tests
+1022 - Coverage - overall_uncovered_lines - INT - Uncovered lines by all tests
+1023 - Coverage - covered_conditions_by_line - DATA - Covered conditions by line
+1024 - Coverage - new_overall_line_coverage - PERCENT - Line coverage of added/changed code by all tests
+1025 - Coverage - conditions_by_line - DATA - Conditions by line
+1026 - Coverage - new_overall_lines_to_cover - INT - New lines to cover by all tests
+1027 - Coverage - it_lines_to_cover - INT - Lines to cover by Integration Tests
+1028 - Coverage - it_coverage_line_hits_data - DATA - Coverage hits by line by integration tests
+1029 - Coverage - overall_coverage - PERCENT - Overall test coverage
+1030 - Coverage - overall_conditions_to_cover - INT - Branches to cover by all tests
+1031 - Coverage - overall_branch_coverage - PERCENT - Condition coverage by all tests
+1032 - Coverage - new_overall_uncovered_conditions - INT - New conditions that are not covered by any test
+1033 - Coverage - it_uncovered_conditions - INT - Uncovered conditions by integration tests
+1034 - Coverage - it_branch_coverage - PERCENT - Condition coverage by integration tests
+1035 - Coverage - coverage_line_hits_data - DATA - Coverage hits by line
+1036 - Coverage - overall_lines_to_cover - INT - Overall lines to cover by all tests
+1037 - Coverage - new_overall_conditions_to_cover - INT - New branches to cover by all tests
+1038 - Coverage - new_overall_branch_coverage - PERCENT - Condition coverage of new/changed code by all tests
+1039 - Coverage - new_it_coverage - PERCENT - Integration tests coverage of new/changed code
+1040 - Coverage - overall_conditions_by_line - DATA - Overall conditions by all tests and by line
+1041 - Coverage - new_it_branch_coverage - PERCENT - Integration tests condition coverage of new/changed code
+1042 - Coverage - test_data - DATA - Unit tests details
+1043 - Coverage - overall_covered_conditions_by_line - DATA - Overall covered conditions by all tests and by line
+1044 - Coverage - new_it_conditions_to_cover - INT - Branches to cover by Integration Tests on New Code
+1045 - Coverage - it_covered_conditions_by_line - DATA - IT covered conditions by line
+1046 - Design - arch_violations_weighted - INT - Total number of Architecture Violations
+1047 - Design - arch_violations - INT - Number of Architecture Violations
+58 - Documentation - public_api - INT - Public API
+61 - Documentation - public_documented_api_density - PERCENT - Public documented classes and functions balanced by ncloc
+62 - Documentation - public_undocumented_api - INT - Public undocumented classes, functions and variables
+1048 - Documentation - commented_out_code_lines - INT - Commented lines of code
+8 - Duplications - duplicated_lines - INT - Duplicated lines
+34 - Duplications - duplicated_lines_density - PERCENT - Duplicated lines balanced by statements
+51 - Duplications - duplicated_blocks - INT - Duplicated blocks
+52 - Duplications - duplicated_files - INT - Duplicated files
+53 - Duplications - duplications_data - DATA - Duplications details
+338 - Duplications - new_duplicated_lines - INT - Duplicated Lines on New Code
+339 - Duplications - new_duplicated_blocks - INT - Duplicated blocks on new code
+340 - Duplications - new_duplicated_lines_density - PERCENT - Duplicated lines on new code balanced by statements
+47 - General - quality_profiles - DATA - Details of quality profiles used during analysis
+294 - General - quality_gate_details - DATA - The project detailed status with regard to its quality gate
+1049 - General - Structure101_Web_Application_URL - STRING - Structure101_Web_Application_URL
+1050 - General - arch-diagrams - DATA - Image binary data
+1051 - General - project - DATA - project
+1052 - General - s101.buildbreaker - BOOL - breaks build
+42 - Issues - violations - INT - Issues
+78 - Issues - blocker_violations - INT - Blocker issues
+79 - Issues - critical_violations - INT - Critical issues
+80 - Issues - major_violations - INT - Major issues
+81 - Issues - minor_violations - INT - Minor issues
+82 - Issues - info_violations - INT - Info issues
+164 - Issues - new_violations - INT - New issues
+165 - Issues - new_blocker_violations - INT - New Blocker issues
+166 - Issues - new_critical_violations - INT - New Critical issues
+167 - Issues - new_major_violations - INT - New Major issues
+168 - Issues - new_minor_violations - INT - New Minor issues
+169 - Issues - new_info_violations - INT - New Info issues
+274 - Issues - false_positive_issues - INT - False positive issues
+275 - Issues - open_issues - INT - Open issues
+276 - Issues - reopened_issues - INT - Reopened issues
+277 - Issues - confirmed_issues - INT - Confirmed issues
+324 - Issues - wont_fix_issues - INT - Won't fix issues
+1053 - Jdepend - missing_package_info - INT - No Description
+1054 - Jdepend - package_count - INT - No Description
+1055 - Jdepend - java_count - INT - No Description
+1056 - Jdepend - package_info_count - INT - No Description
+1057 - Jdepend - package - INT - No Description
+1058 - Jdepend - number-of-classes-and-interfaces - INT - No Description
+1059 - Jdepend - afferent-couplings - INT - No Description
+1060 - Jdepend - package-dependency-cycles - INT - No Description
+1061 - Jdepend - missing_package_info_count - INT - No Description
+1062 - Jdepend - efferent-couplings - INT - No Description
+162 - Maintainability - sqale_index - WORK_DUR - Total effort (in hours) to fix all the issues on the component and therefore to comply to all the requirements.
+163 - Maintainability - sqale_rating - RATING - A-to-E rating based on the technical debt ratio
+280 - Maintainability - development_cost - FLOAT - Development cost
+289 - Maintainability - new_technical_debt - WORK_DUR - Added technical debt
+297 - Maintainability - sqale_debt_ratio - PERCENT - Ratio of the actual technical debt compared to the estimated cost to develop the whole source code from scratch
+304 - Maintainability - new_sqale_debt_ratio - PERCENT - Technical Debt Ratio of new/changed code.
+306 - Maintainability - code_smells - INT - Code Smells
+307 - Maintainability - new_code_smells - INT - New Code Smells
+312 - Maintainability - effort_to_reach_maintainability_rating_a - WORK_DUR - Effort to reach maintainability rating A
+341 - Maintainability - new_maintainability_rating - RATING - Maintainability rating on new code
+348 - Maintainability - new_development_cost - FLOAT - Development cost on new code
+1063 - Management - business_value - FLOAT - No Description
+1064 - Management - team_size - INT - No Description
+1065 - Management - burned_budget - FLOAT - No Description
+1066 - No Domain - s101_model_alignment - PERCENT - No Description
+1067 - No Domain - s101_model_refactoring_actions - INT - No Description
+1068 - No Domain - s101_model_name - STRING - No Description
+1069 - No Domain - s101_model_sequential_actions - INT - No Description
+1070 - No Domain - fat_method_list - INT - No Description
+1071 - No Domain - s101_model_class_mappings - INT - No Description
+48 - Releasability - alert_status - LEVEL - The project status with regard to its quality gate.
+308 - Reliability - bugs - INT - Bugs
+309 - Reliability - new_bugs - INT - New Bugs
+313 - Reliability - reliability_remediation_effort - WORK_DUR - Reliability Remediation Effort
+314 - Reliability - new_reliability_remediation_effort - WORK_DUR - Reliability remediation effort on new code
+315 - Reliability - reliability_rating - RATING - Reliability rating
+342 - Reliability - new_reliability_rating - RATING - Reliability rating on new code
+181 - SCM - last_commit_date - MILLISEC - No Description
+310 - Security - vulnerabilities - INT - Vulnerabilities
+311 - Security - new_vulnerabilities - INT - New Vulnerabilities
+317 - Security - security_remediation_effort - WORK_DUR - Security remediation effort
+318 - Security - new_security_remediation_effort - WORK_DUR - Security remediation effort on new code
+319 - Security - security_rating - RATING - Security rating
+343 - Security - new_security_rating - RATING - Security rating on new code
+350 - Security - security_hotspots - INT - Security Hotspots
+351 - Security - new_security_hotspots - INT - New Security Hotspots
+352 - Security - security_review_rating - RATING - Security Review Rating
+4 - Size - classes - INT - Classes
+5 - Size - ncloc - INT - Non commenting lines of code
+6 - Size - functions - INT - Functions
+32 - Size - comment_lines - INT - Number of comment lines
+33 - Size - comment_lines_density - PERCENT - Comments balanced by ncloc + comment lines
+36 - Size - files - INT - Number of files
+37 - Size - directories - INT - Directories
+55 - Size - lines - INT - Lines
+60 - Size - statements - INT - Number of statements
+150 - Size - generated_lines - INT - Number of generated lines
+151 - Size - generated_ncloc - INT - Generated non Commenting Lines of Code
+238 - Size - ncloc_data - DATA - No Description
+239 - Size - comment_lines_data - DATA - No Description
+240 - Size - projects - INT - Number of projects
+293 - Size - ncloc_language_distribution - DATA - Non Commenting Lines of Code Distributed By Language
+337 - Size - new_lines - INT - New lines
+1072 - Size - accessors - INT - Accessors
+1073 - Sonargraph Integration - sg_i.NUMBER_OF_UNAPPLICABLE_TASKS - INT - Number of tasks that have no matching elements
+1074 - Sonargraph Integration - sg_i.CORE_CODE_COMMENT_LINES - INT - Counts all comment lines excluding header comments.
+1075 - Sonargraph Integration - sg_i.MAX_MODULE_NCCD - FLOAT - Highest Module NCCD
+1076 - Sonargraph Integration - sg_i.JAVA_CYCLIC_PACKAGES_PERCENT - PERCENT - Percentage of cyclically coupled packages
+1077 - Sonargraph Integration - sg_i.CORE_STATEMENTS - INT - Counts all statements.
+1078 - Sonargraph Integration - sg_i.ARCHITECTURE_FEATURE_AVAILABLE - BOOL - Used to signal if the architecture feature is available
+1079 - Sonargraph Integration - sg_i.CORE_RACD - FLOAT - Relative average component dependency. Average component dependency divided by the number of internal components multiplied by 100 (in percent).
+1080 - Sonargraph Integration - sg_i.NUMBER_OF_RESOLUTIONS - INT - Number of defined resolutions
+1081 - Sonargraph Integration - sg_i.CORE_CYCLIC_COMPONENTS - INT - Number of components involved in cycles.
+1082 - Sonargraph Integration - sg_i.CORE_CCD - INT - Cumulative component dependency according to John Lakos. Cumulated depends upon values.
+1083 - Sonargraph Integration - sg_i.CORE_EMPTY_ARTIFACT_COUNT - INT - Number of active architecture artifacts that are empty
+1084 - Sonargraph Integration - sg_i.CORE_LINES_OF_CODE - INT - Lines of code excluding blank and comment lines.
+1085 - Sonargraph Integration - sg_i.JAVA_BIGGEST_PACKAGE_CYCLE_GROUP - INT - Biggest package cycle.
+1086 - Sonargraph Integration - sg_i.VIOLATING_COMPONENTS_PERCENT - PERCENT - Percentage of components with architecture violation
+1087 - Sonargraph Integration - sg_i.CORE_COMPONENTS - INT - Number of components.
+1088 - Sonargraph Integration - sg_i.NUMBER_OF_THRESHOLD_VIOLATIONS - INT - Number of threshold violations
+1089 - Sonargraph Integration - sg_i.CORE_VIOLATIONS_PARSER_DEPENDENCIES - INT - Number of architecture violating parser dependencies
+1090 - Sonargraph Integration - sg_i.NUMBER_OF_UNAPPLICABLE_RESOLUTIONS - INT - Number of resolutions that have no matching elements
+1091 - Sonargraph Integration - sg_i.NUMBER_OF_CRITICAL_ISSUES_WITHOUT_RESOLUTION - INT - Total number of issues (warnings and errors) without resolution
+1092 - Sonargraph Integration - sg_i.CORE_IGNORED_THRESHOLD_VIOLATIONS - INT - Number of ignored threshold violations.
+1093 - Sonargraph Integration - sg_i.UNASSIGNED_COMPONENTS_PERCENT - PERCENT - Percentage of unassigned components
+1094 - Sonargraph Integration - sg_i.VIRTUAL_MODEL_FEATURE_AVAILABLE - BOOL - Used to signal if the virtual model feature is available
+1095 - Sonargraph Integration - sg_i.CORE_COMMENT_LINES - INT - Counts all comment lines.
+1096 - Sonargraph Integration - sg_i.NUMBER_OF_IGNORED_CRITICAL_ISSUES - INT - Number of ignored critical issues
+1097 - Sonargraph Integration - sg_i.CORE_ARTIFACT_COUNT - INT - Number of active architecture artifacts
+1098 - Sonargraph Integration - sg_i.CORE_VIOLATING_COMPONENTS - INT - Number of components that contain architecture violations
+1099 - Sonargraph Integration - sg_i.CORE_STRUCTURAL_DEBT_INDEX_COMPONENTS - INT - Cummulative structural debt index of non-ignored component cycles.
+1100 - Sonargraph Integration - sg_i.CORE_ACD - FLOAT - Average component dependency according to John Lakos. Average number of components a component depends on directly and indirectly. This metric can be used to characterize the overall average coupling of internal components.
+1101 - Sonargraph Integration - sg_i.CORE_SOURCE_ELEMENT_COUNT - INT - "Number of programming elements (i.e. typesSonargraph Integration - sg_i.CORE_COMPONENT_CYCLE_GROUPS - INT - Number of component cycles.
+1102 - Sonargraph Integration - sg_i.JAVA_IGNORED_CYCLIC_PACKAGES - INT - Number of ignored cyclic packages.
+1103 - Sonargraph Integration - sg_i.JAVA_STRUCTURAL_DEBT_INDEX_PACKAGES - INT - Cummulative structural debt index of non-ignored package cycles.
+1104 - Sonargraph Integration - sg_i.CORE_BIGGEST_COMPONENT_CYCLE_GROUP - INT - Number of components in biggest cycle.
+1105 - Sonargraph Integration - sg_i.CORE_DUPLICATES - INT - Number of duplicated code blocks.
+1106 - Sonargraph Integration - sg_i.JAVA_CYCLIC_PACKAGES - INT - Number of cyclic packages.
+1107 - Sonargraph Integration - sg_i.NUMBER_OF_REFACTORINGS - INT - Number of refactoring definitions
+1108 - Sonargraph Integration - sg_i.PERCENTAGEOFDEADCODE - FLOAT - Percentage of potentially dead code
+1109 - Sonargraph Integration - sg_i.CURRENT_VIRTUAL_MODEL - STRING - Virtual model that has been active when the report has been created
+1110 - Sonargraph Integration - sg_i.CORE_MAX_ACD - FLOAT - Highest ACD value among child elements.
+1111 - Sonargraph Integration - sg_i.CORE_PARSER_DEPENDENCIES_TO_REMOVE_COMPONENTS - INT - Number of code lines to change to break up all non-ignored component cycles.
+1112 - Sonargraph Integration - sg_i.CORE_IGNORED_DUPLICATES - INT - Number of ignored duplicated code blocks.
+1113 - Sonargraph Integration - sg_i.CORE_DUPLICATED_LINES - INT - Number of duplicated lines in non-ignored duplicated code blocks.
+1114 - Sonargraph Integration - sg_i.CORE_COMPONENT_DEPENDENCIES_TO_REMOVE_COMPONENTS - INT - Number of component dependencies to remove to break up all non-ignored component cycles
+1115 - Sonargraph Integration - sg_i.NUMBER_OF_PARSER_DEPENDENCIES_AFFECTED_BY_REFACTORINGS - INT - Number of parser depencencies affected by refactorings
+1116 - Sonargraph Integration - sg_i.JAVA_PACKAGES - INT - Number of packages containing types.
+1117 - Sonargraph Integration - sg_i.JAVA_CYCLICITY_PACKAGES - INT - Cummulated cyclicity of package cycles.
+1118 - Sonargraph Integration - sg_i.CORE_UNASSIGNED_COMPONENTS - INT - Number of internal components that are not assigned to any artifact
+1119 - Sonargraph Integration - sg_i.STRUCTURAL_DEBT_COST - FLOAT - Estimated Cost to Repair Structural Erosion
+1120 - Sonargraph Integration - sg_i.JAVA_PACKAGE_CYCLE_GROUPS - INT - Number of package cycle groups.
+1121 - Sonargraph Integration - sg_i.JAVA_PARSER_DEPENDENCIES_TO_REMOVE_PACKAGES - INT - Number of code lines to change to break up all non-ignored package cycles.
+1122 - Sonargraph Integration - sg_i.JAVA_BYTE_CODE_INSTRUCTIONS - INT - Number of Java byte code instructions.
+1123 - Sonargraph Integration - sg_i.CORE_NCCD - FLOAT - Normalized cumulative component dependency  according to John Lakos. The ratio between the cumulative component dependency and the cumulative component dependency of a balanced binary tree of the same size. A value greater than 1 indicates a more verti...
+1124 - Sonargraph Integration - sg_i.JAVA_COMPONENT_DEPENDENCIES_TO_REMOVE_PACKAGES - INT - Number of component dependencies to remove to break up all non-ignored package cycles.
+1125 - Sonargraph Integration - sg_i.CORE_CYCLICITY_COMPONENTS - INT - Cummulated cyclicity of component cycles.
+1126 - Sonargraph Integration - sg_i.CORE_IGNORED_CYCLIC_COMPONENTS - INT - Number of components involved in ignored cycles.
+1127 - Sonargraph Integration - sg_i.CORE_VIOLATIONS_COMPONENT_DEPENDENCIES - INT - Number of architecture violating component dependencies
+1128 - Sonargraph Integration - sg_i.NUMBER_OF_WORKSPACE_WARNINGS - INT - Number of workspace warnings
+1129 - Sonargraph Integration - sg_i.CORE_TOTAL_LINES - INT - Counts all lines including empty and comment lines.
+1130 - Sonargraph Integration - sg_i.CORE_THRESHOLD_VIOLATIONS - INT - Number of non-ignored threshold violations.
+1131 - Sonargraph Integration - sg_i.CORE_RELATIVE_CYCLICITY_COMPONENTS - FLOAT - Relative component cyclicity in percent.
+1132 - Sonargraph Integration - sg_i.JAVA_RELATIVE_CYCLICITY_PACKAGES - FLOAT - Relative package cyclicity in percent.
+1133 - Sonargraph Integration - sg_i.NUMBER_OF_TASKS - INT - Number of task definitions
+1134 - Sonargraph Integration - sg_i.NUMBER_OF_ISSUES - INT - Total number of issues
+1135 - Sonargraph Integration - sg_i.CORE_IGNORED_VIOLATIONS_PARSER_DEPENDENCIES - INT - Number of parser dependencies in ignored architecture violations
+1136 - Sonargraph Integration - sg_i.NUMBER_OF_UNAPPLICABLE_REFACTORINGS - INT - Number of refactorings that have no matching elements
