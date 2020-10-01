@@ -30,30 +30,40 @@ class Metrics(SonarObject):
             },
             output_path = output_path
         )
+        self.__server_metrics = []
 
     def _write_csv(self):
 
         metrics = []
         self._element_list.sort(key=lambda x: ('None' if 'domain' not in x else x['domain'], int(x['id'])))
-        for metric in self._element_list:
-            if metric == 'sonarjava_feedback':
+        for element in self._element_list:
+
+            # Ignore this, extremely long
+            if element['key'] == 'sonarjava_feedback':
                 continue
 
-            metric = ('No Domain' if 'domain' not in metric else metric['domain'],
-                      'No Key' if 'key' not in metric else metric['key'],
-                      'No Type' if 'type' not in metric else metric['type'],
-                      'No Description' if 'description' not in metric else metric['description'])
+            metric = (  
+                        element['id'],
+                        'No Domain' if 'domain' not in element else element['domain'],
+                        'No Key' if 'key' not in element else element['key'],
+                        'No Type' if 'type' not in element else element['type'],
+                        'No Description' if 'description' not in element else element['description']
+                    )
 
             metrics.append(metric)
+            self.__server_metrics.append(element['key'])
 
         if metrics:
-            headers = ['domain', 'key', 'type', 'description']
             output_path = Path(self._output_path).joinpath("metrics")
             output_path.mkdir(parents=True, exist_ok=True)
-            file_path = output_path.joinpath("metrics.csv")
-            df = pd.DataFrame(data=metrics, columns=headers)
-            df.to_csv(file_path, index=False, header=True)
+            file_path = output_path.joinpath("metrics.txt")
+            with open(file_path, 'w') as f:
+                for metric in metrics:
+                    f.write(" - ".join(metric)+"\n")
 
     def process_elements(self):
         self._query_server(key = "metrics")
         self._write_csv()
+
+    def get_server_metrics(self):
+        return self.__server_metrics
