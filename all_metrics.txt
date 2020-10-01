@@ -203,7 +203,8 @@
 1098 - Sonargraph Integration - sg_i.CORE_VIOLATING_COMPONENTS - INT - Number of components that contain architecture violations
 1099 - Sonargraph Integration - sg_i.CORE_STRUCTURAL_DEBT_INDEX_COMPONENTS - INT - Cummulative structural debt index of non-ignored component cycles.
 1100 - Sonargraph Integration - sg_i.CORE_ACD - FLOAT - Average component dependency according to John Lakos. Average number of components a component depends on directly and indirectly. This metric can be used to characterize the overall average coupling of internal components.
-1101 - Sonargraph Integration - sg_i.CORE_SOURCE_ELEMENT_COUNT - INT - "Number of programming elements (i.e. typesSonargraph Integration - sg_i.CORE_COMPONENT_CYCLE_GROUPS - INT - Number of component cycles.
+1101 - Sonargraph Integration - sg_i.CORE_SOURCE_ELEMENT_COUNT - INT - "Number of programming elements (i.e. types, fields, methods, functions, ...) plus number of statements.
+1102 - Sonargraph Integration - sg_i.CORE_COMPONENT_CYCLE_GROUPS - INT - Number of component cycles.
 1102 - Sonargraph Integration - sg_i.JAVA_IGNORED_CYCLIC_PACKAGES - INT - Number of ignored cyclic packages.
 1103 - Sonargraph Integration - sg_i.JAVA_STRUCTURAL_DEBT_INDEX_PACKAGES - INT - Cummulative structural debt index of non-ignored package cycles.
 1104 - Sonargraph Integration - sg_i.CORE_BIGGEST_COMPONENT_CYCLE_GROUP - INT - Number of components in biggest cycle.

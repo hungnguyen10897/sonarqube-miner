@@ -7,16 +7,18 @@ from sonar_issue import Issues
 
 COURSE_SERVER = "https://course-sonar.rd.tuni.fi/"
 SONAR63 = "http://sonar63.rd.tut.fi/"
-server = SONAR63
+SONARCLOUD = "https://sonarcloud.io/"
+server = SONARCLOUD
 
-ORGANIZATION = "default-organization"
+organization = "default-organization" if server != SONARCLOUD else "apache"
 
 def fetch_sonar_data(output_path):
     # Run only once
     metrics = Metrics(server, output_path)
     metrics.process_elements()
+    server_metrics = metrics.get_server_metrics()
 
-    prj = Projects(server, ORGANIZATION, output_path)
+    prj = Projects(server, organization, output_path)
     projects = prj.process_elements()
     projects.sort(key=lambda x: x['key'])
 
@@ -32,17 +34,21 @@ def fetch_sonar_data(output_path):
 
         print(f"{len(analysis_keys_dates[0])} analyses.")
 
-        # measure = Measures(SONAR63, output_path, project['key'], analysis_keys_dates[0])
-        # measure.process_elements()
+        measure = Measures(server, output_path, project['key'], analysis_keys_dates[0], server_metrics)
+        measure.process_elements()
 
-        issues = Issues(SONAR63, output_path, project['key'], analysis_keys_dates)
+        issues = Issues(server, output_path, project['key'], analysis_keys_dates)
         issues.process_elements()
         print('{0} issues completed'.format(project['name']))
         
 if __name__ == '__main__':
+
     ap = argparse.ArgumentParser()
     ap.add_argument("-o", "--output-path", default='./sonar_data', help="Path to output file directory.")
     args = vars(ap.parse_args())
+
     output_path = args['output_path']
+
     fetch_sonar_data(output_path)
+
     print("Finish")

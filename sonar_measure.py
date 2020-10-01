@@ -52,21 +52,24 @@ def concat_measures(measures_1, measures_2):
             measure_1['history'] = measure_1['history'] + measure_2['history']
     return measures_1
 
-def read_metrics(output_path):
-    path = f'{output_path}/metrics/metrics.csv'
+def read_all_metrics():
+
+    current_file_path = os.path.realpath(__file__)
+    parent_path = '/'.join(current_file_path.split("/")[:-1])
+    path = f'{parent_path}/all_metrics.txt'
     p = Path(path)
+
     if not p.exists():
-        print("ERROR: Path for metrics {0} does not exists.".format(p.resolve()))
+        print("ERROR: Path for all metrics {0} does not exists.".format(p.resolve()))
         sys.exit(1)
     try:
         metrics_order = {}
         with open(p, 'r') as f:
-            csv_reader = csv.reader(f)
-            next(csv_reader)
             order = 0
-            for line in csv_reader:
-                metric = line[1]
-                metric_type = line[2]
+            for line in f.readlines():
+                parts = line.split(" - ")
+                metric = parts[2]
+                metric_type = parts[3]
                 metrics_order[metric] = (order, metric_type)
                 order += 1
         return metrics_order
@@ -75,7 +78,7 @@ def read_metrics(output_path):
         sys.exit(1)
 
 class Measures(SonarObject):
-    def __init__(self, server, output_path, project_key, analysis_keys):
+    def __init__(self, server, output_path, project_key, analysis_keys, server_metrics):
         SonarObject.__init__(
             self,
             endpoint = server + "api/measures/search_history",
@@ -90,13 +93,14 @@ class Measures(SonarObject):
         self.__data = {}
         self.__project_key = project_key
         self.__analysis_keys = analysis_keys
+        self.__server_metrics = server_metrics
 
     # Different implementation from superclass method at line
     # meansures = concat_meansures(meansires, self._query_server)
     def _query_server(self):
         response_dict = self._call_api()
         if response_dict is None:
-            []
+            return []
         
         measures = response_dict["measures"]
         self.__total_num_measures = response_dict['paging']['total']
@@ -106,7 +110,7 @@ class Measures(SonarObject):
             measures = concat_measures(measures, self._query_server())
         return measures
 
-    def __extract_measures_value(self, measures, metrics_order_type):
+    def __extract_measures_value(self, measures, metrics_order_type, non_server_metrics):
 
         num_rows = len(self.__analysis_keys)
 
@@ -118,31 +122,37 @@ class Measures(SonarObject):
 
         for measure in measures:
             metric = measure['metric']
-
-            metric_type = metrics_order_type[metric][1]
             columns.append(metric)
-            history = measure['history']
 
-            contain_comma = False
-            if metric in ['quality_profiles', 'quality_gate_details']:
-                contain_comma = True
+            # Non-server metric
+            if metric in non_server_metrics:
+                values = [None] * num_rows
+            else:
+                history = measure['history']
+                metric_type = metrics_order_type[metric][1]
 
-            list_with_semicolon = False
-            if metric in ['class_complexity_distribution', 'function_complexity_distribution',
-                          'file_complexity_distribution', 'ncloc_language_distribution']:
-                list_with_semicolon = True
+                contain_comma = False
+                if metric in ['quality_profiles', 'quality_gate_details']:
+                    contain_comma = True
 
-            values = list(map(lambda x: None if 'value' not in x else safe_cast(x['value'], metric_type, contain_comma, list_with_semicolon), history))
-            values.reverse()            
-            values = values[:num_rows]  # get only num_rows latest values
+                list_with_semicolon = False
+                if metric in ['class_complexity_distribution', 'function_complexity_distribution',
+                            'file_complexity_distribution', 'ncloc_language_distribution']:
+                    list_with_semicolon = True
 
-            if len(values) < num_rows:
-                values = values + [None] * (num_rows - len(values))
+                values = list(map(lambda x: None if 'value' not in x else safe_cast(x['value'], metric_type, contain_comma, list_with_semicolon), history))
+                values.reverse()            
+                values = values[:num_rows]  # get only num_rows latest values
 
-            if metrics_order_type[metric][1] == "INT":
-                values = pd.array(values, dtype=pd.Int64Dtype())
+                # Interpolate with None till num_rows
+                if len(values) < num_rows:
+                    values = values + [None] * (num_rows - len(values))
+
+                if metric_type == "INT":
+                    values = pd.array(values, dtype=pd.Int64Dtype())
 
             data[metric] = values
+            
         return columns, data
 
     def _write_csv(self):
@@ -155,18 +165,24 @@ class Measures(SonarObject):
         df.to_csv(file_path, index=False, header=True)
 
     def __metric_wise_search(self):
-        metrics_order_type = read_metrics(self._output_path)
-        metrics_list = list(metrics_order_type.keys())
+        all_metrics_order_type = read_all_metrics()
+        all_metrics_set = set(all_metrics_order_type.keys())
+        non_server_metrics = all_metrics_set.difference(set(self.__server_metrics))
+
         measures = []
 
-        for i in range(0, len(metrics_list), 10):
-            self._params['metrics'] = ','.join(metrics_list[i:i + 10])
+        for i in range(0, len(self.__server_metrics), 10):
+            self._params['metrics'] = ','.join(self.__server_metrics[i:i + 10])
             self._params['p'] = 1
             measures = measures + self._query_server()
 
-        measures.sort(key=lambda x: metrics_order_type[x['metric']][0])
+        # Adding non-server metrics
+        for non_server_metric in non_server_metrics:
+            measures.append({'metric' : non_server_metric})
 
-        self.__columns, self.__data = self.__extract_measures_value(measures, metrics_order_type)
+        measures.sort(key=lambda x: all_metrics_order_type[x['metric']][0])
+
+        self.__columns, self.__data = self.__extract_measures_value(measures, all_metrics_order_type, non_server_metrics)
         
     def process_elements(self):
         self.__metric_wise_search()
