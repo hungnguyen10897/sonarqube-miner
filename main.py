@@ -35,7 +35,7 @@ def fetch_sonar_data(output_path):
             continue
         print(f"\t{len(analysis_keys_dates[0])} new analyses")
 
-        measure = Measures(server, output_path, project['key'], analysis_keys_dates[0], server_metrics)
+        measure = Measures(server, output_path, project['key'], analysis_keys_dates, server_metrics)
         measure.process_elements()
 
         issues = Issues(server, output_path, project['key'], analysis_keys_dates)

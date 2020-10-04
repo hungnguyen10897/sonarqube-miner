@@ -32,12 +32,33 @@ class Analysis(SonarObject):
         self.__latest_ts = None
         self.__file_name = get_proper_file_name(self.__project_key)
 
+    def __get_last_analysis_ts_on_file(self):
+
+        output_path = Path(self._output_path).joinpath("analysis")
+        if not output_path.exists():
+            return None
+
+        archive_file_path = output_path.joinpath(f"{self.__file_name}.csv")
+        if not archive_file_path.exists():
+                return None
+        try:
+            analyses_df = pd.read_csv(archive_file_path.absolute(), dtype=SONAR_ANALYSES_DTYPE, parse_dates=['date'])
+            last_analysis_ts = analyses_df['date'].max()
+
+            return last_analysis_ts
+        except Exception as e:
+            print(f"Exception {e} reading latest analysis timestamp from file {archive_file_path}")
+            return None
+
     def _write_csv(self):
         analysis_list = []
+        last_analysis_ts = self.__get_last_analysis_ts_on_file()
         for analysis in self._element_list:
 
             analysis_key = None if 'key' not in analysis else analysis['key']
             date = None if 'date' not in analysis else process_datetime(analysis['date'])
+            if date is not None and last_analysis_ts is not None and date <= last_analysis_ts:
+                continue
             project_version = None if 'projectVersion' not in analysis else analysis['projectVersion']
             revision = None if 'revision' not in analysis else analysis['revision']
             line = (self.__project_key, analysis_key, date, project_version, revision)

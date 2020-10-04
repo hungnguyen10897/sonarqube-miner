@@ -6,7 +6,8 @@ import numpy as np
 import sys
 from sonar_object import SonarObject
 from route_config import RequestsConfig
-from utils import process_datetime, get_duration_from_str
+from utils import process_datetime, get_duration_from_str, get_proper_file_name
+from sonar_analysis import SONAR_ANALYSES_DTYPE
 
 SONAR_ISSUES_TYPE = OrderedDict({
     "project": "object",
@@ -69,6 +70,25 @@ class Issues(SonarObject):
         # dates are in decreasing order
         self.__analysis_keys_dates = list(zip(analysis_keys_dates[0], analysis_keys_dates[1]))
         self._element_list = []
+        self.__file_name = get_proper_file_name(self.__project_key)
+
+    def __get_last_analysis_ts_on_file(self):
+
+        output_path = Path(self._output_path).joinpath("analysis")
+        if not output_path.exists():
+            return None
+
+        archive_file_path = output_path.joinpath(f"{self.__file_name}.csv")
+        if not archive_file_path.exists():
+                return None
+        try:
+            analyses_df = pd.read_csv(archive_file_path.absolute(), dtype=SONAR_ANALYSES_DTYPE, parse_dates=['date'])
+            last_analysis_ts = analyses_df['date'].max()
+
+            return last_analysis_ts
+        except Exception as e:
+            print(f"Exception {e} reading latest analysis timestamp from file {archive_file_path}")
+            return None
 
     def _more_elements(self, partial_issues_num):
         if self._params['p'] * self._params['ps'] < partial_issues_num:
@@ -172,17 +192,18 @@ class Issues(SonarObject):
         issues = []
         output_path = Path(self._output_path).joinpath("issues")
         output_path.mkdir(parents=True, exist_ok=True)
-        file_name = self.__project_key.replace(' ', '_').replace(':', '_')
-        file_path = output_path.joinpath(f"{file_name}.csv")
+
+        latest_analysis_ts_on_file = self.__get_last_analysis_ts_on_file()
+        
+        file_path = output_path.joinpath(f"{self.__file_name}_staging.csv")
 
         for project_issue in self._element_list:
 
             update_date = None if 'updateDate' not in project_issue else process_datetime(project_issue['updateDate'])
 
-            # Not yet implemented, functionality to fetch only new issues
-            # # belong to the analyses on file
-            # if update_date is not None and latest_analysis_ts_on_file is not None and update_date <= latest_analysis_ts_on_file:
-            #     continue
+            # belong to the analyses on file
+            if update_date is not None and latest_analysis_ts_on_file is not None and update_date <= latest_analysis_ts_on_file:
+                continue
 
             current_analysis_key = None if update_date is None else get_analysis_key(update_date, self.__analysis_keys_dates)
 
