@@ -74,7 +74,7 @@ class Issues(SonarObject):
 
     def __get_last_analysis_ts_on_file(self):
 
-        output_path = Path(self._output_path).joinpath("analysis")
+        output_path = Path(self._output_path).joinpath("analyses")
         if not output_path.exists():
             return None
 

@@ -34,7 +34,7 @@ class Analysis(SonarObject):
 
     def __get_last_analysis_ts_on_file(self):
 
-        output_path = Path(self._output_path).joinpath("analysis")
+        output_path = Path(self._output_path).joinpath("analyses")
         if not output_path.exists():
             return None
 
@@ -66,7 +66,7 @@ class Analysis(SonarObject):
 
         if analysis_list:
 
-            output_path = Path(self._output_path).joinpath("analysis")
+            output_path = Path(self._output_path).joinpath("analyses")
             output_path.mkdir(parents=True, exist_ok=True)
 
             file_path = output_path.joinpath(f"{self.__file_name}_staging.csv")
@@ -78,7 +78,7 @@ class Analysis(SonarObject):
 
     # Try to read latest timestamp recorded to get only later analyses
     def __prepare_anlysis_query(self):
-        output_path = Path(self._output_path).joinpath("analysis")
+        output_path = Path(self._output_path).joinpath("analyses")
         output_path.mkdir(parents=True, exist_ok=True)
             
         archive_file = output_path.joinpath(f"{self.__file_name}.csv")
