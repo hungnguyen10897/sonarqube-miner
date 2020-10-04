@@ -39,7 +39,7 @@ t2 = PythonOperator(
     task_id = "merge_stage_archive",
     provide_context=False,
     python_callable= main,
-    op_args=[f"{repo_dir}/sonar_data"],
+    op_args=[None, f"{repo_dir}/sonar_data"],
     dag = dag
 )
 
