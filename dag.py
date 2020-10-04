@@ -9,7 +9,7 @@ pra_repo_dir = "/mnt/pra"
 sys.path.append(repo_dir)
 sys.path.append(pra_repo_dir)
 
-from sonarcloud_data.sonar_miner import fetch_sonar_data
+from sonar_miner_main import fetch_sonar_data
 from merge_stage_archive import main
 
 from datetime import datetime, timedelta, date
@@ -30,7 +30,7 @@ t1 = PythonOperator(
     task_id = 'fetch_sonarqube_data',
     provide_context=False,
     python_callable= fetch_sonar_data,
-    op_args=[f'{repo_dir}/sonar_data/data'],
+    op_args=[f'{repo_dir}/sonar_data'],
     dag = dag
 )
 
@@ -39,7 +39,7 @@ t2 = PythonOperator(
     task_id = "merge_stage_archive",
     provide_context=False,
     python_callable= main,
-    op_args=[f"{repo_dir}/sonar_data/data"],
+    op_args=[f"{repo_dir}/sonar_data"],
     dag = dag
 )
 
