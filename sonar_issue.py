@@ -7,7 +7,6 @@ import sys
 from sonar_object import SonarObject
 from route_config import RequestsConfig
 from utils import process_datetime, get_duration_from_str, get_proper_file_name
-from sonar_analysis import SONAR_ANALYSES_DTYPE
 
 SONAR_ISSUES_TYPE = OrderedDict({
     "project": "object",
@@ -71,24 +70,6 @@ class Issues(SonarObject):
         self.__analysis_keys_dates = list(zip(analysis_keys_dates[0], analysis_keys_dates[1]))
         self._element_list = []
         self.__file_name = get_proper_file_name(self.__project_key)
-
-    def __get_last_analysis_ts_on_file(self):
-
-        output_path = Path(self._output_path).joinpath("analyses")
-        if not output_path.exists():
-            return None
-
-        archive_file_path = output_path.joinpath(f"{self.__file_name}.csv")
-        if not archive_file_path.exists():
-                return None
-        try:
-            analyses_df = pd.read_csv(archive_file_path.absolute(), dtype=SONAR_ANALYSES_DTYPE, parse_dates=['date'])
-            last_analysis_ts = analyses_df['date'].max()
-
-            return last_analysis_ts
-        except Exception as e:
-            print(f"Exception {e} reading latest analysis timestamp from file {archive_file_path}")
-            return None
 
     def _more_elements(self, partial_issues_num):
         if self._params['p'] * self._params['ps'] < partial_issues_num:
@@ -184,6 +165,20 @@ class Issues(SonarObject):
             # Last execution
             self._element_list += self._sub_query_server()
 
+    def __get_old_issues_df(self):
+
+        issues_archive_file_path = Path(self._output_path).joinpath("issues").joinpath(f"{self.__file_name}.csv")
+        if not issues_archive_file_path.exists():
+            return None
+        
+        try:
+            old_issues_df = pd.read_csv(issues_archive_file_path.absolute(), dtype=SONAR_ISSUES_TYPE, parse_dates=["creation_date", "update_date", "close_date"])
+            return old_issues_df
+
+        except Exception as e:
+            print(f"Exception {e} reading latest analysis timestamp from file {issues_archive_file_path.absolute()}")
+            return None
+
     def _write_csv(self):
 
         if not self._element_list:
@@ -192,19 +187,12 @@ class Issues(SonarObject):
         issues = []
         output_path = Path(self._output_path).joinpath("issues")
         output_path.mkdir(parents=True, exist_ok=True)
-
-        latest_analysis_ts_on_file = self.__get_last_analysis_ts_on_file()
         
         file_path = output_path.joinpath(f"{self.__file_name}_staging.csv")
 
         for project_issue in self._element_list:
 
             update_date = None if 'updateDate' not in project_issue else process_datetime(project_issue['updateDate'])
-
-            # belong to the analyses on file
-            if update_date is not None and latest_analysis_ts_on_file is not None and update_date <= latest_analysis_ts_on_file:
-                continue
-
             current_analysis_key = None if update_date is None else get_analysis_key(update_date, self.__analysis_keys_dates)
 
             issue_key = None if 'key' not in project_issue else project_issue['key']
@@ -239,21 +227,30 @@ class Issues(SonarObject):
             end_offset = None if 'textRange' not in project_issue else None if 'endOffset' not in project_issue[
                 'textRange'] else project_issue['textRange']['endOffset']
             hash_value = None if 'hash' not in project_issue else project_issue['hash']
-            from_hotspot = None if 'fromHotspot' not in project_issue else project_issue['fromHotspot']
+            from_hotspot = None if 'fromHotspot' not in project_issue else str(project_issue['fromHotspot'])
 
             issue = (self.__project_key, current_analysis_key, creation_analysis_key, issue_key, issue_type, rule,
                         severity, status, resolution, effort, debt, tags, creation_date, update_date, close_date, message,
                         component, start_line, end_line, start_offset, end_offset, hash_value, from_hotspot)
             issues.append(issue)
 
-        print(f"\t{len(issues)} new issues")
-
-        df = pd.DataFrame(data=issues, columns=SONAR_ISSUES_TYPE.keys())
-        df = df.astype({
+        issues_df = pd.DataFrame(data=issues, columns=SONAR_ISSUES_TYPE.keys())
+        issues_df = issues_df.astype({
             "effort": "Int64",
-            "debt": "Int64"
+            "debt": "Int64",
+            "start_line" : "Int64",
+            "end_line" : "Int64",
+            "start_offset" : "Int64",
+            "end_offset" : "Int64",
         })
-        df.to_csv(file_path, index=False, header=True, mode='w')
+        old_issues_df = self.__get_old_issues_df()
+        if old_issues_df is not None:
+            new_issues_df = issues_df.merge(old_issues_df, how = 'outer' ,indicator=True).loc[lambda x : x['_merge']=='left_only'].drop(['_merge'], axis=1)
+        else:
+            new_issues_df = issues_df
+            
+        print(f"\t{new_issues_df.shape[0]} new issues")
+        new_issues_df.to_csv(file_path, index=False, header=True, mode='w')
 
     def process_elements(self):
         self._query_server()

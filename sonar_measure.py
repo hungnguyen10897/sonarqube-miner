@@ -191,6 +191,7 @@ class Measures(SonarObject):
         measures.sort(key=lambda x: all_metrics_order_type[x['metric']][0])
 
         self.__columns, self.__data = self.__extract_measures_value(measures, all_metrics_order_type, non_server_metrics)
+        print(f"\t{len(self.__data)} new measures")
         
     def process_elements(self):
         self.__prepare_measure_query()
