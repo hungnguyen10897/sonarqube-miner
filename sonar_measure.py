@@ -170,6 +170,7 @@ class Measures(SonarObject):
         file_path = output_path.joinpath(f"{self.__file_name}_staging.csv")
 
         df = pd.DataFrame(data=self.__data, columns=self.__columns)
+        print(f"\t{df.shape[0]} new measures")
         df.to_csv(file_path, index=False, header=True, mode='w')
 
     def __metric_wise_search(self):
@@ -191,7 +192,6 @@ class Measures(SonarObject):
         measures.sort(key=lambda x: all_metrics_order_type[x['metric']][0])
 
         self.__columns, self.__data = self.__extract_measures_value(measures, all_metrics_order_type, non_server_metrics)
-        print(f"\t{len(self.__data)} new measures")
         
     def process_elements(self):
         self.__prepare_measure_query()
