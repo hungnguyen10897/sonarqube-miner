@@ -242,6 +242,9 @@ class Issues(SonarObject):
             "end_line" : "Int64",
             "start_offset" : "Int64",
             "end_offset" : "Int64",
+            "creation_date" : "datetime64[ns]",
+            "update_date" : "datetime64[ns]",
+            "close_date" : "datetime64[ns]",
         })
         old_issues_df = self.__get_old_issues_df()
         if old_issues_df is not None:
