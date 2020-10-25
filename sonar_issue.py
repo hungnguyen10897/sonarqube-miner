@@ -182,6 +182,7 @@ class Issues(SonarObject):
     def _write_csv(self):
 
         if not self._element_list:
+            print("\tNo issues queried.")
             return
 
         issues = []
@@ -199,8 +200,6 @@ class Issues(SonarObject):
             creation_date = None if 'creationDate' not in project_issue else process_datetime(
                 project_issue['creationDate'])
             creation_analysis_key = None if creation_date is None else get_analysis_key(creation_date, self.__analysis_keys_dates)
-            # Not yet implemented, functionality to fetch only new issues
-            # creation_analysis_key = None if creation_date is None else get_creation_analysis_key(issue_key, creation_date, issue_key_analysis_map, key_date_list)
 
             close_date = None if 'closeDate' not in project_issue else process_datetime(project_issue['closeDate'])
             rule = None if 'rule' not in project_issue else project_issue['rule']
