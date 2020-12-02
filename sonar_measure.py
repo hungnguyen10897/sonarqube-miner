@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from sonar_object import SonarObject
 from route_config import RequestsConfig
-from utils import get_proper_file_name
+from utils import get_proper_file_name, read_all_metrics
 
 def safe_cast(val, to_type, contain_comma=False, list_with_semicolon=False):
     if to_type in ['INT', 'WORK_DUR']:
@@ -52,31 +52,6 @@ def concat_measures(measures_1, measures_2):
         if measure_2['history']:
             measure_1['history'] = measure_1['history'] + measure_2['history']
     return measures_1
-
-def read_all_metrics():
-
-    current_file_path = os.path.realpath(__file__)
-    parent_path = '/'.join(current_file_path.split("/")[:-1])
-    path = f'{parent_path}/all_metrics.txt'
-    p = Path(path)
-
-    if not p.exists():
-        print("ERROR: Path for all metrics {0} does not exists.".format(p.resolve()))
-        sys.exit(1)
-    try:
-        metrics_order = {}
-        with open(p, 'r') as f:
-            order = 0
-            for line in f.readlines():
-                parts = line.split(" - ")
-                metric = parts[2]
-                metric_type = parts[3]
-                metrics_order[metric] = (order, metric_type)
-                order += 1
-        return metrics_order
-    except Exception as e:
-        print("ERROR: Reading metrics file", e)
-        sys.exit(1)
 
 class Measures(SonarObject):
     def __init__(self, server, output_path, project_key, analysis_keys_dates, server_metrics):
@@ -177,6 +152,7 @@ class Measures(SonarObject):
         all_metrics_order_type = read_all_metrics()
         all_metrics_set = set(all_metrics_order_type.keys())
         non_server_metrics = all_metrics_set.difference(set(self.__server_metrics))
+        new_server_metrics = set(self.__server_metrics).difference(all_metrics_set)
 
         measures = []
 
@@ -188,6 +164,9 @@ class Measures(SonarObject):
         # Adding non-server metrics
         for non_server_metric in non_server_metrics:
             measures.append({'metric' : non_server_metric})
+
+        # Temporarily ignoring new metrics from server.
+        measures = list(filter(lambda x: x['metric'] not in new_server_metrics, measures))
 
         measures.sort(key=lambda x: all_metrics_order_type[x['metric']][0])
 

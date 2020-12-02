@@ -3,6 +3,7 @@ from pathlib import Path
 from sonar_object import SonarObject
 from route_config import RequestsConfig
 from collections import OrderedDict
+from utils import read_all_metrics
 
 TYPE_CONVERSION = {
     "INT": "Int64",
@@ -64,6 +65,14 @@ class Metrics(SonarObject):
     def process_elements(self):
         self._query_server(key = "metrics")
         self._write_csv()
+        all_metrics_order_type = read_all_metrics()
+        all_metrics_set = set(all_metrics_order_type.keys())
+
+        new_server_metrics = set(self.__server_metrics).difference(all_metrics_set)
+        if len(new_server_metrics) > 0:
+            print(f"WARNING: There are {len(new_server_metrics)} new metrics from Sonarcloud server. Please update to include those metrics.")
+            print(f"New metrics: {new_server_metrics}")
+
 
     def get_server_metrics(self):
         return self.__server_metrics

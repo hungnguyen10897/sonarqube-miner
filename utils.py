@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
-import sys, re
+import sys, re, os
+from pathlib import Path
 
 def process_datetime(time_str):
     if time_str is None:
@@ -44,3 +45,28 @@ def get_duration_from_str(input_str):
 def get_proper_file_name(origin):
     p = re.compile("[^0-9a-z-_]")
     return p.sub('_', origin.lower())
+
+def read_all_metrics():
+
+    current_file_path = os.path.realpath(__file__)
+    parent_path = '/'.join(current_file_path.split("/")[:-1])
+    path = f'{parent_path}/all_metrics.txt'
+    p = Path(path)
+
+    if not p.exists():
+        print("ERROR: Path for all metrics {0} does not exists.".format(p.resolve()))
+        sys.exit(1)
+    try:
+        metrics_order = {}
+        with open(p, 'r') as f:
+            order = 0
+            for line in f.readlines():
+                parts = line.split(" - ")
+                metric = parts[2]
+                metric_type = parts[3]
+                metrics_order[metric] = (order, metric_type)
+                order += 1
+        return metrics_order
+    except Exception as e:
+        print("ERROR: Reading metrics file", e)
+        sys.exit(1)
