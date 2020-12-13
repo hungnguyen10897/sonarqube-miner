@@ -5,9 +5,7 @@ from airflow.operators.python_operator import PythonOperator
 
 import sys
 repo_dir = "/mnt/sonar_miner"
-pra_repo_dir = "/mnt/pra"
 sys.path.append(repo_dir)
-sys.path.append(pra_repo_dir)
 
 from sonar_miner_main import fetch_sonar_data
 from merge_stage_archive import main
@@ -39,7 +37,7 @@ t2 = PythonOperator(
     task_id = "merge_stage_archive",
     provide_context=False,
     python_callable= main,
-    op_args=[None, f"{repo_dir}/sonar_data"],
+    op_args=[f"{repo_dir}/sonar_data"],
     dag = dag
 )
 
