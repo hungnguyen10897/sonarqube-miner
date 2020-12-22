@@ -9,7 +9,7 @@ To run:
 python3 sonar_miner_main.py
 ```
 
-You can pass the server, organization or output path to write data to. These are exposed as options to the entry script. By default, the tool runs against Sonarcloud server (https://sonarcloud.io), 'apache' organization and creates a output folder name 'sonar_data' for output data in the working directory. Usually, you can ignore the organization option if the server is not Sonarcloud Server.
+You can pass the server, organization or output path to write data to. These are exposed as options to the entry script. By default, the tool runs against Sonarcloud server (https://sonarcloud.io), _apache_ organization and creates a output folder name _sonar_data_ for output data in the working directory. Usually, you can ignore the `-o (organization)` option if the server is not Sonarcloud Server.
 
 ```
 usage: sonar_miner_main.py [-h] [-p OUTPUT_PATH] [-s SERVER] [-o ORGANIZATION]
