@@ -36,7 +36,12 @@ class Metrics(SonarObject):
     def _write_csv(self):
 
         metrics = []
-        self._element_list.sort(key=lambda x: ('None' if 'domain' not in x else x['domain'], int(x['id'])))
+        self._element_list.sort(key=lambda x: ('None' if 'domain' not in x else x['domain'], x['id']))
+
+        all_metrics_order_type = read_all_metrics()
+        all_metrics_set = set(all_metrics_order_type.keys())
+        has_new_metric = False
+
         for element in self._element_list:
 
             # Ignore this, extremely long
@@ -50,9 +55,15 @@ class Metrics(SonarObject):
                         'No Type' if 'type' not in element else element['type'],
                         'No Description' if 'description' not in element else element['description']
                     )
-
             metrics.append(metric)
             self.__server_metrics.append(element['key'])
+
+            # New metric
+            if element['key'] not in all_metrics_set:
+                if not has_new_metric:
+                    print(f"WARNING: There are new metrics from the server. Please update to include those metrics:")
+                    has_new_metric = True
+                print(f"\t{' - '.join(metric)}")
 
         if metrics:
             output_path = Path(self._output_path).joinpath("metrics")
@@ -65,14 +76,6 @@ class Metrics(SonarObject):
     def process_elements(self):
         self._query_server(key = "metrics")
         self._write_csv()
-        all_metrics_order_type = read_all_metrics()
-        all_metrics_set = set(all_metrics_order_type.keys())
-
-        new_server_metrics = set(self.__server_metrics).difference(all_metrics_set)
-        if len(new_server_metrics) > 0:
-            print(f"WARNING: There are {len(new_server_metrics)} new metrics from Sonarcloud server. Please update to include those metrics.")
-            print(f"New metrics: {new_server_metrics}")
-
 
     def get_server_metrics(self):
         return self.__server_metrics

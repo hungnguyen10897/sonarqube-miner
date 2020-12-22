@@ -165,7 +165,7 @@ class Measures(SonarObject):
         for non_server_metric in non_server_metrics:
             measures.append({'metric' : non_server_metric})
 
-        # Temporarily ignoring new metrics from server.
+        # Ignoring new metrics from server.
         measures = list(filter(lambda x: x['metric'] not in new_server_metrics, measures))
 
         measures.sort(key=lambda x: all_metrics_order_type[x['metric']][0])
