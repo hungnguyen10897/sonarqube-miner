@@ -240,3 +240,12 @@
 1134 - Sonargraph Integration - sg_i.NUMBER_OF_ISSUES - INT - Total number of issues
 1135 - Sonargraph Integration - sg_i.CORE_IGNORED_VIOLATIONS_PARSER_DEPENDENCIES - INT - Number of parser dependencies in ignored architecture violations
 1136 - Sonargraph Integration - sg_i.NUMBER_OF_UNAPPLICABLE_REFACTORINGS - INT - Number of refactorings that have no matching elements
+1137 - SecurityReview - new_security_review_rating - RATING - Security Review Rating on New Code
+1138 - SecurityReview - security_hotspots_reviewed - PERCENT - Percentage of Security Hotspots Reviewed
+1139 - SecurityReview - new_security_hotspots_reviewed - PERCENT - Percentage of Security Hotspots Reviewed on New Code
+1140 - SecurityReview - security_hotspots_reviewed_status - INT - Security Review Reviewed Status
+1141 - SecurityReview - security_hotspots_to_review_status - INT - Security Review To Review Status
+1142 - SecurityReview - new_security_hotspots_reviewed_status - INT - Security Review Reviewed Status on New Code
+1143 - SecurityReview - new_security_hotspots_to_review_status - INT - Security Review To Review Status on New Code
+1144 - Size - unanalyzed_c - INT - No Description
+1145 - Size - unanalyzed_cpp - INT - No Description
