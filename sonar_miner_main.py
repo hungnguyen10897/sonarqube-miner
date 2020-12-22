@@ -46,7 +46,7 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument("-p", "--output-path", default='./sonar_data', help="Path to output file directory.")
     ap.add_argument("-s", "--server", default=SERVER, help="Sonarqube Server.")
-    ap.add_argument("-o", "--organization", default="", help="Sonarcloud organization.")
+    ap.add_argument("-o", "--organization", default="", help="Sonarqube organization.")
     args = vars(ap.parse_args())
 
     output_path = args['output_path']
