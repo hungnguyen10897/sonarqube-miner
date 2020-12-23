@@ -1,5 +1,6 @@
 env/**
 __pycache__/**
 .vscode/**
-sonar_data/**
+**/sonar-data/**
+**/sonar_data/**
 .DS_Store

@@ -31,4 +31,20 @@ python3 sonar_miner_main.py -s http://localhost:9000 -p ./my_server_data
 
 ```
 
-## Requirements
+## Metrics
+
+### Ordering of measures files
+
+The script generates measures based on the metrics. There can be difference in the metrics between servers. However the output measures CSV files will have common schema, which is determined by the **all_metrics.txt** file. The columns of measures CSV files will be ordered by their appearance in the file.
+
+### New metrics
+
+When there are new metrics from the server, there will be a WARNING in stdout
+
+```
+WARNING: There are new metrics from the server. Please update to include those metrics:
+        AXXg9E3o5xt5QjmKpG2t - Size - unanalyzed_c - INT - No Description
+        AXXg9E3o5xt5QjmKpG2u - Size - unanalyzed_cpp - INT - No Description
+```
+
+To include certain metrics into the measures files in the next execution, copy wanted lines/metrics and paste them into **all_metrics.txt**.

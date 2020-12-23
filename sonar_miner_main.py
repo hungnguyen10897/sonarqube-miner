@@ -12,7 +12,7 @@ SERVER = SONARCLOUD
 
 def fetch_sonar_data(output_path, server, organization):
 
-    print(organization)
+    print(f"Fetching data from server {server} - organization {organization}")
 
     metrics = Metrics(server, output_path)
     metrics.process_elements()
