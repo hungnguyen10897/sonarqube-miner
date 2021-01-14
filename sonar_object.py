@@ -1,4 +1,5 @@
 from route_config import RequestsConfig
+from utils import identity
 
 class SonarObject:
     def __init__(self, endpoint, params, output_path):
@@ -18,21 +19,21 @@ class SonarObject:
             return None
         return response.json()
 
-    def _query_server(self, key):
+    def _query_server(self, key, format_function=identity):
         response_dict = self._call_api()
         if response_dict is None:
             return
             
-        self._element_list = response_dict[key]
+        self._element_list = format_function(response_dict[key])
 
-        if key == "metrics":
+        if key in ["metrics", "rules"]:
             self._total_num_elements = response_dict['total']
         else:
             self._total_num_elements = response_dict['paging']['total']
 
         if self._more_elements():
             self._params['p'] = self._params['p'] + 1
-            self._element_list = self._element_list + self._query_server(key)
+            self._element_list = self._element_list + self._query_server(key, format_function=format_function)
 
         return self._element_list
     

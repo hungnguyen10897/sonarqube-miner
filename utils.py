@@ -70,3 +70,6 @@ def read_all_metrics():
     except Exception as e:
         print("ERROR: Reading metrics file", e)
         sys.exit(1)
+
+def identity(p):
+    return p
