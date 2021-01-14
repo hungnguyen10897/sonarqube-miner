@@ -58,9 +58,6 @@ class Issues(SonarObject):
                 'p': 1,                         # varialbe
                 'ps': 500,
                 'componentKeys': project_key,
-                'createdAfter': None,           # variable
-                'createdBefore' : None,         # variable
-                's': 'CREATION_DATE'
             },
             output_path = output_path
         )
@@ -72,8 +69,9 @@ class Issues(SonarObject):
         self.__file_name = get_proper_file_name(self.__project_key)
         self.__rules = rules
 
-    def _more_elements(self, partial_issues_num):
-        if self._params['p'] * self._params['ps'] < partial_issues_num:
+    def _more_elements(self, issues_num):
+        max_issues_num = issues_num if issues_num <= 10000 else 10000
+        if self._params['p'] * self._params['ps'] < max_issues_num:
             return True
         return False
 
@@ -83,13 +81,12 @@ class Issues(SonarObject):
             return []
 
         issues = response_dict["issues"]
-        partial_issues_num = response_dict['paging']['total']
+        issues_num = response_dict['paging']['total']
         
-        # > 10 000 issues for current createdBefore, createdAfter parameters
-        if partial_issues_num > 10000 and not force:
+        if issues_num > 10000 and not force:
             return None
 
-        if self._more_elements(partial_issues_num):
+        if self._more_elements(issues_num):
             self._params['p'] += 1
             issues += self._sub_query_server()
 
