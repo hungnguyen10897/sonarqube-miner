@@ -50,7 +50,7 @@ def get_creation_analysis_key(issue_key, creation_date, issue_key_analysis_map, 
     return issue_key_analysis_map[issue_key]
 
 class Issues(SonarObject):
-    def __init__(self, server, output_path, project_key, analysis_keys_dates):
+    def __init__(self, server, output_path, project_key, analysis_keys_dates, rules):
         SonarObject.__init__(
             self,
             endpoint = server + "api/issues/search",
@@ -70,13 +70,14 @@ class Issues(SonarObject):
         self.__analysis_keys_dates = list(zip(analysis_keys_dates[0], analysis_keys_dates[1]))
         self._element_list = []
         self.__file_name = get_proper_file_name(self.__project_key)
+        self.__rules = rules
 
     def _more_elements(self, partial_issues_num):
         if self._params['p'] * self._params['ps'] < partial_issues_num:
             return True
         return False
 
-    def _sub_query_server(self):
+    def _sub_query_server(self, force=False):
         response_dict = self._call_api()
         if response_dict is None:
             return []
@@ -85,7 +86,7 @@ class Issues(SonarObject):
         partial_issues_num = response_dict['paging']['total']
         
         # > 10 000 issues for current createdBefore, createdAfter parameters
-        if partial_issues_num > 10000:
+        if partial_issues_num > 10000 and not force:
             return None
 
         if self._more_elements(partial_issues_num):
@@ -96,28 +97,6 @@ class Issues(SonarObject):
 
     def _query_server(self):
 
-        # This means at the one timestamp there are > 10 000 issues
-        if self._params['createdAfter'] is not None and self._params['createdBefore'] is not None and self._params['createdBefore'] < self._params['createdAfter']:
-            timestamp = self._params['createdAfter']
-            self._params['createdAt'] = timestamp  
-            self._params['createdAfter'] = None
-            self._params['createdBefore'] = None
-            for severity in ["INFO", "MINOR", "MAJOR", "CRITICAL", "BLOCKER"]:
-                self._params['severities'] = severity
-                self._element_list += self._sub_query_server()
-                self._params['p'] = 1
-                self._params['severities'] = None
-            self._params['createdAt'] = None
-
-            next_timestamp = datetime.strptime(timestamp[:19], "%Y-%m-%dT%H:%M:%S") + timedelta(seconds=1)
-
-            next_timestamp = '{0}-{1}-{2}T{3}:{4}:{5}{6}'.format(next_timestamp.strftime('%Y'), next_timestamp.strftime('%m'),
-                                                                next_timestamp.strftime('%d'), next_timestamp.strftime('%H'),
-                                                                next_timestamp.strftime('%M'), next_timestamp.strftime('%S'),
-                                                                timestamp[19:])
-            self._params['createdAfter'] = next_timestamp
-            self._params['createdBefore'] = None
-
         # First api call to check total number of issues
         response_dict = self._call_api()
         if response_dict is None:
@@ -125,44 +104,25 @@ class Issues(SonarObject):
 
         total_issues = response_dict['paging']['total']
         if total_issues > 10000:
-            # Go to last 'page' to check timestamp, returned is sorted time wise
-            self._params['p'] = 20
-            response_dict = self._call_api()
-            if response_dict is None:
-                return
-
-            last_timestamp = response_dict['issues'][-1]['creationDate']
-            previous_timestamp = datetime.strptime(last_timestamp[:19], "%Y-%m-%dT%H:%M:%S") + timedelta(seconds=-1)
-
-            previous_timestamp = '{0}-{1}-{2}T{3}:{4}:{5}{6}'.format(previous_timestamp.strftime('%Y'), previous_timestamp.strftime('%m'),
-                                                                previous_timestamp.strftime('%d'), previous_timestamp.strftime('%H'),
-                                                                previous_timestamp.strftime('%M'), previous_timestamp.strftime('%S'),
-                                                                last_timestamp[19:])
-
-            self._params['p'] = 1
-            self._params['createdBefore'] = previous_timestamp
             
-            sub_query_result = self._sub_query_server()
+            for severity in ["INFO", "MINOR", "MAJOR", "CRITICAL", "BLOCKER"]:
+                self._params['severities'] = severity
+                sub_query_result = self._sub_query_server()
 
-            if type(sub_query_result) == list:
-                self._element_list += sub_query_result
+                # Still >10000 issues for the severity,
+                # iterate by rules,
+                # forcing to get issues even if there are more than 10000 now (force=True)
+                if sub_query_result is None:    
+                    for rule in self.__rules:
+                        self._params['rules'] = rule
+                        self._element_list += self._sub_query_server(force=True)
+                        self._params['p'] = 1
+                        self._params['rules'] = None
+                else:
+                    self._element_list += sub_query_result
+                self._params['severities'] = None
 
-            # sub_query_result is None
-            # meaning that the current createdAfter and createdBefore params still return > 10 000 issues
-            # start sub query with 'severities' parameter
-            else:   
-                for severity in ["INFO", "MINOR", "MAJOR", "CRITICAL", "BLOCKER"]:
-                    self._params['severities'] = severity
-                    self._element_list += self._sub_query_server()
-                    self._params['p'] = 1
-
-            # Prepare for next batch
-            self._params['p'] = 1
-            self._params['createdAfter'] = last_timestamp
-            self._query_server()
-    
         else:
-            # Last execution
             self._element_list += self._sub_query_server()
 
     def __get_old_issues_df(self):

@@ -4,6 +4,7 @@ from sonar_metric import Metrics
 from sonar_analysis import Analysis
 from sonar_measure import Measures
 from sonar_issue import Issues
+from sonar_rule import Rule
 
 COURSE_SERVER = "https://course-sonar.rd.tuni.fi/"
 SONAR63 = "http://sonar63.rd.tut.fi/"
@@ -17,6 +18,9 @@ def fetch_sonar_data(output_path, server, organization):
     metrics = Metrics(server, output_path)
     metrics.process_elements()
     server_metrics = metrics.get_server_metrics()
+
+    r = Rule(server, organization)
+    rules = r.get_server_rules()
 
     prj = Projects(server, organization, output_path)
     projects = prj.process_elements()
@@ -38,7 +42,7 @@ def fetch_sonar_data(output_path, server, organization):
         measure = Measures(server, output_path, project['key'], analysis_keys_dates, server_metrics)
         measure.process_elements()
 
-        issues = Issues(server, output_path, project['key'], analysis_keys_dates)
+        issues = Issues(server, output_path, project['key'], analysis_keys_dates, rules)
         issues.process_elements()
         
 if __name__ == '__main__':

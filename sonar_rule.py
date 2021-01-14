@@ -2,14 +2,14 @@ from sonar_object import SonarObject
 
 class Rule(SonarObject):
 
-    def __init__(self, server):
+    def __init__(self, server, organization):
         SonarObject.__init__(
             self,
             endpoint = server + "api/rules/search",
             params =    {
                 'p': 1,     # page/iteration
                 'ps': 100,  # pageSize
-                'organization': 'default-organization',
+                'organization': organization,
             },
             output_path = None
         )
