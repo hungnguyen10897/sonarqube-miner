@@ -12,7 +12,7 @@ SONAR_ANALYSES_DTYPE = OrderedDict({
         "revision": "object"
 })
 
-class Analysis(SonarObject):
+class Analyses(SonarObject):
 
     def __init__(self, server, output_path, project_key):
         SonarObject.__init__(

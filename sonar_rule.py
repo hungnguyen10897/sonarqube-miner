@@ -1,6 +1,6 @@
 from sonar_object import SonarObject
 
-class Rule(SonarObject):
+class Rules(SonarObject):
 
     def __init__(self, server, organization):
         SonarObject.__init__(
@@ -22,6 +22,6 @@ class Rule(SonarObject):
         return rule_keys
 
     def get_server_rules(self):
-        self._query_server(key="rules", format_function=Rule.get_rule_keys)
+        self._query_server(key="rules", format_function=Rules.get_rule_keys)
         return self._element_list
 

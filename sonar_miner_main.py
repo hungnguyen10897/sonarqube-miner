@@ -1,10 +1,10 @@
 import argparse
 from sonar_project import Projects
 from sonar_metric import Metrics
-from sonar_analysis import Analysis
+from sonar_analysis import Analyses
 from sonar_measure import Measures
 from sonar_issue import Issues
-from sonar_rule import Rule
+from sonar_rule import Rules
 
 COURSE_SERVER = "https://course-sonar.rd.tuni.fi/"
 SONAR63 = "http://sonar63.rd.tut.fi/"
@@ -19,7 +19,7 @@ def fetch_sonar_data(output_path, server, organization):
     metrics.process_elements()
     server_metrics = metrics.get_server_metrics()
 
-    r = Rule(server, organization)
+    r = Rules(server, organization)
     rules = r.get_server_rules()
 
     prj = Projects(server, organization, output_path)
@@ -31,7 +31,7 @@ def fetch_sonar_data(output_path, server, organization):
     for project in projects:
         print(f'{i}. {project["name"]}:')
         i += 1
-        analysis = Analysis(server, output_path, project['key'])
+        analysis = Analyses(server, output_path, project['key'])
         analysis.process_elements()
         analysis_keys_dates = analysis.get_analysis_keys_dates()    # (keys, dates) tuple 
 
