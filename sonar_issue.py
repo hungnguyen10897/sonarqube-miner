@@ -8,6 +8,8 @@ from sonar_object import SonarObject
 from route_config import RequestsConfig
 from utils import process_datetime, get_duration_from_str, get_proper_file_name
 
+ISSUES_PAGE_SIZE = 500
+
 SONAR_ISSUES_TYPE = OrderedDict({
     "project": "object",
     "current_analysis_key": "object",
@@ -56,7 +58,7 @@ class Issues(SonarObject):
             endpoint = server + "api/issues/search",
             params = {
                 'p': 1,                         # varialbe
-                'ps': 500,
+                'ps': ISSUES_PAGE_SIZE,
                 'componentKeys': project_key,
             },
             output_path = output_path
@@ -75,17 +77,14 @@ class Issues(SonarObject):
             return True
         return False
 
-    def _sub_query_server(self, force=False):
+    def _sub_query_server(self):
         response_dict = self._call_api()
         if response_dict is None:
             return []
 
         issues = response_dict["issues"]
-        issues_num = response_dict['paging']['total']
+        issues_num = response_dict['total']
         
-        if issues_num > 10000 and not force:
-            return None
-
         if self._more_elements(issues_num):
             self._params['p'] += 1
             issues += self._sub_query_server()
@@ -95,31 +94,39 @@ class Issues(SonarObject):
     def _query_server(self):
 
         # First api call to check total number of issues
+        self._params["ps"] = 1  # Reduce data to load
         response_dict = self._call_api()
         if response_dict is None:
             return
+        total_issues = response_dict['total']
 
-        total_issues = response_dict['paging']['total']
         if total_issues > 10000:
             
             for severity in ["INFO", "MINOR", "MAJOR", "CRITICAL", "BLOCKER"]:
+                
                 self._params['severities'] = severity
-                sub_query_result = self._sub_query_server()
+                self._params["ps"] = 1
+                response_dict = self._call_api()
+                if response_dict is None:
+                    return
+                severity_total_issues = response_dict['total']
+                self._params["ps"] = ISSUES_PAGE_SIZE
 
                 # Still >10000 issues for the severity,
                 # iterate by rules,
-                # forcing to get issues even if there are more than 10000 now (force=True)
-                if sub_query_result is None:    
+                if severity_total_issues > 10000:
                     for rule in self.__rules:
                         self._params['rules'] = rule
-                        self._element_list += self._sub_query_server(force=True)
+                        self._element_list += self._sub_query_server()
                         self._params['p'] = 1
                         self._params['rules'] = None
                 else:
-                    self._element_list += sub_query_result
+                    self._element_list += self._sub_query_server()
+                self._params['p'] = 1
                 self._params['severities'] = None
 
         else:
+            self._params["ps"] = ISSUES_PAGE_SIZE
             self._element_list += self._sub_query_server()
 
     def __get_old_issues_df(self):
