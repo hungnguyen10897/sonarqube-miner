@@ -7,7 +7,7 @@ import sys
 repo_dir = "/mnt/sonar_miner"
 sys.path.append(repo_dir)
 
-from sonar_miner_main import fetch_sonar_data
+from sonar_src import fetch_sonar_data
 from merge_stage_archive import main
 
 from datetime import datetime, timedelta, date
