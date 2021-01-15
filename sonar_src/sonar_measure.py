@@ -3,9 +3,10 @@ import pandas as pd
 import os, sys, csv
 from datetime import datetime
 from pathlib import Path
-from sonar_object import SonarObject
-from route_config import RequestsConfig
-from utils import get_proper_file_name, read_all_metrics
+
+from sonar_src.sonar_object import SonarObject
+from sonar_src.route_config import RequestsConfig
+from sonar_src.utils import get_proper_file_name, read_all_metrics
 
 def safe_cast(val, to_type, contain_comma=False, list_with_semicolon=False):
     if to_type in ['INT', 'WORK_DUR']:

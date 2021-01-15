@@ -4,9 +4,10 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import numpy as np
 import sys
-from sonar_object import SonarObject
-from route_config import RequestsConfig
-from utils import process_datetime, get_duration_from_str, get_proper_file_name
+
+from sonar_src.utils import process_datetime, get_duration_from_str, get_proper_file_name
+from sonar_src.sonar_object import SonarObject
+from sonar_src.route_config import RequestsConfig
 
 ISSUES_PAGE_SIZE = 500
 

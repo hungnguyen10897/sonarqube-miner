@@ -1,5 +1,5 @@
-from route_config import RequestsConfig
-from utils import identity
+from sonar_src.route_config import RequestsConfig
+from sonar_src.utils import identity
 
 class SonarObject:
     def __init__(self, endpoint, params, output_path):
