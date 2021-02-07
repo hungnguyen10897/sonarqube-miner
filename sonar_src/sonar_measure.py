@@ -55,7 +55,7 @@ def concat_measures(measures_1, measures_2):
     return measures_1
 
 class Measures(SonarObject):
-    def __init__(self, server, output_path, project_key, analysis_keys_dates, server_metrics):
+    def __init__(self, server, organization, output_path, project_key, analysis_keys_dates, server_metrics):
         SonarObject.__init__(
             self,
             endpoint = server + "api/measures/search_history",
@@ -67,6 +67,8 @@ class Measures(SonarObject):
             },
             output_path = output_path
         )
+
+        self.__organization = organization
         self.__columns = []
         self.__data = {}
         self.__project_key = project_key
@@ -100,10 +102,11 @@ class Measures(SonarObject):
         num_rows = len(self.__analysis_keys)
 
         data = OrderedDict()
-        data['project_key'] = [self.__project_key] * num_rows
+        data['organization'] = [self.__organization] * num_rows
+        data['project'] = [self.__project_key] * num_rows
         data['analysis_key'] = self.__analysis_keys
 
-        columns = ['project_key', 'analysis_key']
+        columns = ['organization', 'project', 'analysis_key']
 
         for measure in measures:
             metric = measure['metric']

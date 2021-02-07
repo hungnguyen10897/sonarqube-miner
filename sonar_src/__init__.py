@@ -25,7 +25,7 @@ def fetch_sonar_data(output_path, organization = 'apache', server = "https://son
     for project in projects:
         print(f'{i}. {project["name"]}:')
         i += 1
-        analysis = Analyses(server, output_path, project['key'])
+        analysis = Analyses(server, organization, output_path, project['key'])
         analysis.process_elements()
         analysis_keys_dates = analysis.get_analysis_keys_dates()    # (keys, dates) tuple 
 
@@ -33,8 +33,8 @@ def fetch_sonar_data(output_path, organization = 'apache', server = "https://son
             continue
         print(f"\t{len(analysis_keys_dates[0])} new analyses")
 
-        measure = Measures(server, output_path, project['key'], analysis_keys_dates, server_metrics)
+        measure = Measures(server, organization, output_path, project['key'], analysis_keys_dates, server_metrics)
         measure.process_elements()
 
-        issues = Issues(server, output_path, project['key'], analysis_keys_dates, rules)
+        issues = Issues(server, organization, output_path, project['key'], analysis_keys_dates, rules)
         issues.process_elements()

@@ -6,6 +6,7 @@ from sonar_src.sonar_object import SonarObject
 from sonar_src.utils import process_datetime, get_proper_file_name
 
 SONAR_ANALYSES_DTYPE = OrderedDict({
+        "organization": "object",
         "project": "object",
         "analysis_key": "object",
         "date": "object",
@@ -15,7 +16,7 @@ SONAR_ANALYSES_DTYPE = OrderedDict({
 
 class Analyses(SonarObject):
 
-    def __init__(self, server, output_path, project_key):
+    def __init__(self, server, organization, output_path, project_key):
         SonarObject.__init__(
             self,
             endpoint = server + "api/project_analyses/search",
@@ -27,6 +28,8 @@ class Analyses(SonarObject):
             },
             output_path = output_path
         )
+
+        self.__organization = organization
         self.__project_key = project_key
         self.__analysis_keys = []           # to return, different from element_list
         self.__analysis_dates = []          # to return, different from element_list
@@ -62,7 +65,7 @@ class Analyses(SonarObject):
                 continue
             project_version = None if 'projectVersion' not in analysis else analysis['projectVersion']
             revision = None if 'revision' not in analysis else analysis['revision']
-            line = (self.__project_key, analysis_key, date, project_version, revision)
+            line = (self.__organization, self.__project_key, analysis_key, date, project_version, revision)
             analysis_list.append(line)
 
         if analysis_list:

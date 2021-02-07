@@ -12,6 +12,7 @@ from sonar_src.route_config import RequestsConfig
 ISSUES_PAGE_SIZE = 500
 
 SONAR_ISSUES_TYPE = OrderedDict({
+    "organization": "object",
     "project": "object",
     "current_analysis_key": "object",
     "creation_analysis_key": "object",
@@ -53,7 +54,7 @@ def get_creation_analysis_key(issue_key, creation_date, issue_key_analysis_map, 
     return issue_key_analysis_map[issue_key]
 
 class Issues(SonarObject):
-    def __init__(self, server, output_path, project_key, analysis_keys_dates, rules):
+    def __init__(self, server, organization, output_path, project_key, analysis_keys_dates, rules):
         SonarObject.__init__(
             self,
             endpoint = server + "api/issues/search",
@@ -65,6 +66,7 @@ class Issues(SonarObject):
             output_path = output_path
         )
 
+        self.__organizaiton = organization
         self.__project_key = project_key
         # dates are in decreasing order
         self.__analysis_keys_dates = list(zip(analysis_keys_dates[0], analysis_keys_dates[1]))
@@ -193,7 +195,7 @@ class Issues(SonarObject):
             hash_value = None if 'hash' not in project_issue else project_issue['hash']
             from_hotspot = None if 'fromHotspot' not in project_issue else str(project_issue['fromHotspot'])
 
-            issue = (self.__project_key, current_analysis_key, creation_analysis_key, issue_key, issue_type, rule,
+            issue = (self.__organizaiton, self.__project_key, current_analysis_key, creation_analysis_key, issue_key, issue_type, rule,
                         severity, status, resolution, effort, debt, tags, creation_date, update_date, close_date, message,
                         component, start_line, end_line, start_offset, end_offset, hash_value, from_hotspot)
             issues.append(issue)
