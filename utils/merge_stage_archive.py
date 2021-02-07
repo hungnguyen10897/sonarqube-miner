@@ -4,6 +4,7 @@ import sys
 import argparse
 
 SONAR_ANALYSES_DTYPE = {
+    "organization" : "object",
     "project" : "object", 
     "analysis_key" : "object", 
     "date" : "object", 
@@ -12,6 +13,7 @@ SONAR_ANALYSES_DTYPE = {
 }
 
 SONAR_MEASURES_DTYPE = {
+    'organization' : 'object',
     'project': 'object',
     'analysis_key': 'object',
     'complexity': 'Int64',
@@ -121,6 +123,7 @@ SONAR_MEASURES_DTYPE = {
     'new_lines': 'object'}
 
 SONAR_ISSUES_DTYPE = {
+    "organization" : "object",
     "project" : "object",
     "current_analysis_key" : "object",
     "creation_analysis_key" : "object",
