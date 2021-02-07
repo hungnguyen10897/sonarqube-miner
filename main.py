@@ -20,4 +20,4 @@ if __name__ == '__main__':
     if organization == "":
         organization = "default-organization" if server != SONARCLOUD else "apache"
 
-    fetch_sonar_data(output_path, server, organization)
+    fetch_sonar_data(output_path, organization, server)

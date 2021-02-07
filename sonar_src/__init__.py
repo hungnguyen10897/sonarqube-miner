@@ -5,7 +5,7 @@ from sonar_src.sonar_measure import Measures
 from sonar_src.sonar_issue import Issues
 from sonar_src.sonar_rule import Rules
 
-def fetch_sonar_data(output_path, server, organization):
+def fetch_sonar_data(output_path, organization = 'apache', server = "https://sonarcloud.io/"):
 
     print(f"Fetching data from server {server} - organization {organization}")
 

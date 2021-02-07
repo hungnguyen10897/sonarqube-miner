@@ -28,7 +28,7 @@ t1 = PythonOperator(
     task_id = 'fetch_sonarqube_data',
     provide_context=False,
     python_callable= fetch_sonar_data,
-    op_args=[f'{repo_dir}/sonar_data'],
+    op_args=[f'{repo_dir}/sonar_data', 'apache', 'https://sonarcloud.io/'],
     dag = dag
 )
 
