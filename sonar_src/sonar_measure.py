@@ -139,6 +139,9 @@ class Measures(SonarObject):
                 if metric_type == "INT":
                     values = pd.array(values, dtype=pd.Int64Dtype())
 
+            # There's 1 metric with name 'project', will interfered with the first 'project' column
+            if metric == "project":
+                metric = "project_"
             data[metric] = values
             
         return columns, data
