@@ -110,7 +110,8 @@ class Measures(SonarObject):
 
         for measure in measures:
             metric = measure['metric']
-            columns.append(metric)
+            # There's 1 metric with name 'project', will interfered with the first 'project' column
+            columns.append(metric if metric != 'project' else 'project_')
 
             # Non-server metric
             if metric in non_server_metrics:
