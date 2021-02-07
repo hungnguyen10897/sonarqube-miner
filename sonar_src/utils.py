@@ -46,15 +46,15 @@ def get_proper_file_name(origin):
     p = re.compile("[^0-9a-z-_]")
     return p.sub('_', origin.lower())
 
-def read_all_metrics():
+def read_used_metrics():
 
     current_file_path = os.path.realpath(__file__)
     parent_path = '/'.join(current_file_path.split("/")[:-1])
-    path = f'{parent_path}/all_metrics.txt'
+    path = f'{parent_path}/used_metrics.txt'
     p = Path(path)
 
     if not p.exists():
-        print("ERROR: Path for all metrics {0} does not exists.".format(p.resolve()))
+        print("ERROR: Path for used metrics {0} does not exists.".format(p.resolve()))
         sys.exit(1)
     try:
         metrics_order = {}

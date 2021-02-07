@@ -6,7 +6,7 @@ from pathlib import Path
 
 from sonar_src.sonar_object import SonarObject
 from sonar_src.route_config import RequestsConfig
-from sonar_src.utils import get_proper_file_name, read_all_metrics
+from sonar_src.utils import get_proper_file_name, read_used_metrics
 
 def safe_cast(val, to_type, contain_comma=False, list_with_semicolon=False):
     if to_type in ['INT', 'WORK_DUR']:
@@ -156,7 +156,7 @@ class Measures(SonarObject):
         df.to_csv(file_path, index=False, header=True, mode='w')
 
     def __metric_wise_search(self):
-        all_metrics_order_type = read_all_metrics()
+        all_metrics_order_type = read_used_metrics()
         all_metrics_set = set(all_metrics_order_type.keys())
         non_server_metrics = all_metrics_set.difference(set(self.__server_metrics))
         new_server_metrics = set(self.__server_metrics).difference(all_metrics_set)

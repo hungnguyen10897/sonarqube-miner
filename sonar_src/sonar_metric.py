@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from sonar_src.sonar_object import SonarObject
 from sonar_src.route_config import RequestsConfig
-from sonar_src.utils import read_all_metrics
+from sonar_src.utils import read_used_metrics
 
 TYPE_CONVERSION = {
     "INT": "Int64",
@@ -39,7 +39,7 @@ class Metrics(SonarObject):
         metrics = []
         self._element_list.sort(key=lambda x: ('None' if 'domain' not in x else x['domain'], x['id']))
 
-        all_metrics_order_type = read_all_metrics()
+        all_metrics_order_type = read_used_metrics()
         all_metrics_set = set(all_metrics_order_type.keys())
         has_new_metric = False
 
