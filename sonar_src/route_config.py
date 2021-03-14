@@ -14,7 +14,7 @@ class RequestsConfig:
 
     @staticmethod
     def call_api_route(session, endpoint, params):
-        r = session.get(endpoint, params=params)
+        r = session.get(endpoint, params=params, verify=False)
         return r
 
     @staticmethod

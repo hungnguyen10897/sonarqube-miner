@@ -1,6 +1,7 @@
 import argparse
 from sonar_src import fetch_sonar_data, fetch_projects_sonar_data
 from pathlib import Path
+from urllib.parse import unquote
 
 COURSE_SERVER = "https://course-sonar.rd.tuni.fi/"
 SONAR63 = "http://sonar63.rd.tut.fi/"
@@ -26,6 +27,7 @@ def iterate_project_file(file):
 
     f = open(file, 'r')
     for line in f.readlines():
+        line = unquote(line)
         server = line.split("dashboard")[0]
         project = line.split("id=")[1].split("&")[0].strip("\n")
         

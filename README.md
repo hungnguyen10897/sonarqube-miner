@@ -22,13 +22,30 @@ optional arguments:
                         Sonarqube Server.
   -o ORGANIZATION, --organization ORGANIZATION
                         Sonarcloud organization.
+  -f FILE, --file FILE  File containing projects' sonarqube links.
 ```
 
-For example, to query against a local server and write output to a custom folder:
+### Examples
+
+To query against a local server and write output to a custom folder:
 
 ```
 python3 main.py -s http://localhost:9000 -p ./my_server_data
+```
 
+To fetch data from a file containing projects' links:
+```
+python3 main.py -f project_list.xt
+```
+
+Content of `project_list.txt`:
+```
+https://sonarcloud.io/dashboard?id=com.jiaochuan%3Ahazakura
+https://course-sonar.rd.tuni.fi/dashboard?id=OHJ3-HARKKA-miko-ja-rope
+https://course-sonar.rd.tuni.fi/dashboard?id=OHJ3-HARKKA-team-fda
+https://course-sonar.rd.tuni.fi/dashboard?id=OHJ3-HARKKA-kivesmiehet
+http://sonar63.rd.tut.fi/dashboard?id=org%3Aapache%3Aaccumulo
+https://sonar.rd.tut.fi/sonar75/dashboard?id=CHangeDistiller
 ```
 
 ## Metrics
