@@ -4,3 +4,4 @@ env/**
 **/sonar-data/**
 **/sonar_data/**
 .DS_Store
+project_list.txt
