@@ -23,6 +23,8 @@ optional arguments:
   -o ORGANIZATION, --organization ORGANIZATION
                         Sonarcloud organization.
   -f FILE, --file FILE  File containing projects' sonarqube links.
+  -c, --component-wise  Whether to fetch issues data for all components of
+                        project.
 ```
 
 ### Examples
@@ -33,9 +35,15 @@ To query against a local server and write output to a custom folder:
 python3 main.py -s http://localhost:9000 -p ./my_server_data
 ```
 
+To fetch issues data from all components of Apache projects
+
+```
+python3 main.py -s https://sonarcloud.io/ -o apache -c
+```
+
 To fetch data from a file containing projects' links:
 ```
-python3 main.py -f project_list.xt
+python3 main.py -f project_list.txt
 ```
 
 Content of `project_list.txt`:

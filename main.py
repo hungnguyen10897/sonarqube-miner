@@ -1,5 +1,5 @@
 import argparse
-from sonar_src import fetch_sonar_data, fetch_projects_sonar_data
+from sonar_src import fetch_organization_sonar_data, fetch_projects_sonar_data
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -7,6 +7,11 @@ COURSE_SERVER = "https://course-sonar.rd.tuni.fi/"
 SONAR63 = "http://sonar63.rd.tut.fi/"
 SONARCLOUD = "https://sonarcloud.io/"
 SERVER = SONARCLOUD
+
+def format_server(server):
+    if not server.endswith("/"):
+        server + "/"
+    return server
 
 def get_server_dir_name(server):
 
@@ -45,13 +50,15 @@ if __name__ == '__main__':
     ap.add_argument("-s", "--server", default=SERVER, help="Sonarqube Server.")
     ap.add_argument("-o", "--organization", default="", help="Sonarqube organization.")
     ap.add_argument("-f", "--file", help="File containing projects' sonarqube links.")
+    ap.add_argument("-c", "--component-wise", default=False, action="store_true", help="Whether to fetch issues data for all components of project.")
     args = vars(ap.parse_args())
 
     output_path = args['output_path']
-    server = args['server']
+    server = format_server(args['server'])
     organization = args['organization']
+    component_wise = args['component_wise']
 
-    if "file" in args:
+    if args["file"] is not None:
         file = args["file"]
         print(f"Fetching projects' data defined in file {file}.")
         for (server, projects) in iterate_project_file(file).items():
@@ -61,10 +68,11 @@ if __name__ == '__main__':
             fetch_projects_sonar_data(
                 str(Path(output_path).joinpath(server_dir_name)),
                 server,
-                projects
+                projects,
+                component_wise
             )
 
     else:
         if organization == "":
             organization = "default-organization" if server != SONARCLOUD else "apache"
-        fetch_sonar_data(output_path, organization, server)
+        fetch_organization_sonar_data(output_path, organization, server, component_wise)

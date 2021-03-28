@@ -5,10 +5,11 @@ from sonar_src.sonar_measure import Measures
 from sonar_src.sonar_issue import Issues
 from sonar_src.sonar_rule import Rules
 from sonar_src.sonar_component_project import ComponentProject
+from sonar_src.sonar_file import Files
 
 import sys
 
-def fetch_sonar_data(output_path, organization = 'apache', server = "https://sonarcloud.io/"):
+def fetch_organization_sonar_data(output_path, organization = 'apache', server = "https://sonarcloud.io/", component_wise=False):
 
     print(f"Fetching data from server {server} - organization {organization}")
 
@@ -36,13 +37,31 @@ def fetch_sonar_data(output_path, organization = 'apache', server = "https://son
             continue
         print(f"\t{len(analysis_keys_dates[0])} new analyses")
 
-        measure = Measures(server, organization, output_path, project['key'], analysis_keys_dates, server_metrics)
+        measure = Measures(server, organization, output_path, project['key'], project['key'], project['key'], analysis_keys_dates, server_metrics)
         measure.process_elements()
 
-        issues = Issues(server, organization, output_path, project['key'], analysis_keys_dates, rules)
+        issues = Issues(server, organization, output_path, project['key'], project['key'], project['key'], analysis_keys_dates, rules)
         issues.process_elements()
 
-def fetch_projects_sonar_data(output_path, server, projects):
+        if not component_wise:
+            continue
+
+        files = Files(server, project['key']).get_files()
+        for file in files:
+            file_key = file[0]
+            file_name = file[1]
+            
+            print(f"\t{file_name} - {file_key}")
+
+            # Measures are the same for all files
+            
+            # measure = Measures(server, organization, output_path, project['key'], file_key, file_name, analysis_keys_dates, server_metrics)
+            # measure.process_elements()
+
+            issues = Issues(server, organization, output_path, project['key'], file_key, file_name, analysis_keys_dates, rules)
+            issues.process_elements()
+
+def fetch_projects_sonar_data(output_path, server, projects, component_wise=False):
 
     print(f"Fetching data from server {server} - project {projects}")
 
@@ -65,7 +84,6 @@ def fetch_projects_sonar_data(output_path, server, projects):
         r = Rules(server, organization)
         rules = r.get_server_rules()
 
-
         analysis = Analyses(server, organization, output_path, project)
         analysis.process_elements()
         analysis_keys_dates = analysis.get_analysis_keys_dates()    # (keys, dates) tuple 
@@ -74,8 +92,26 @@ def fetch_projects_sonar_data(output_path, server, projects):
             continue
         print(f"\t{len(analysis_keys_dates[0])} new analyses")
 
-        measure = Measures(server, organization, output_path, project, analysis_keys_dates, server_metrics)
+        measure = Measures(server, organization, output_path, project, project, project, analysis_keys_dates, server_metrics)
         measure.process_elements()
 
-        issues = Issues(server, organization, output_path, project, analysis_keys_dates, rules)
+        issues = Issues(server, organization, output_path, project, project, project, analysis_keys_dates, rules)
         issues.process_elements()
+
+        if not component_wise:
+            continue
+
+        files = Files(server, project).get_files()
+        for file in files:
+            file_key = file[0]
+            file_name = file[1]
+            
+            print(f"\t{file_name} - {file_key}")
+
+            # Measures are the same for all files
+            
+            # measure = Measures(server, organization, output_path, project, file_key, file_name, analysis_keys_dates, server_metrics)
+            # measure.process_elements()
+
+            issues = Issues(server, organization, output_path, project, file_key, file_name, analysis_keys_dates, rules)
+            issues.process_elements()
