@@ -55,14 +55,14 @@ def concat_measures(measures_1, measures_2):
     return measures_1
 
 class Measures(SonarObject):
-    def __init__(self, server, organization, output_path, project_key, analysis_keys_dates, server_metrics):
+    def __init__(self, server, organization, output_path, project_key, component_key, component_name, analysis_keys_dates, server_metrics):
         SonarObject.__init__(
             self,
             endpoint = server + "api/measures/search_history",
             params =    {
                 'p': 1,     # page/iteration
                 'ps': 1000,  # pageSize
-                'component': project_key,
+                'component': component_key,
                 'from' : None,
             },
             output_path = output_path
@@ -72,10 +72,11 @@ class Measures(SonarObject):
         self.__columns = []
         self.__data = {}
         self.__project_key = project_key
+        self.__component_key = component_key
         self.__analysis_keys = analysis_keys_dates[0]
         self.__analysis_dates = analysis_keys_dates[1]
         self.__server_metrics = server_metrics
-        self.__file_name = get_proper_file_name(self.__project_key)
+        self.__file_name = get_proper_file_name(component_name)
 
     def __prepare_measure_query(self):
         if len(self.__analysis_dates) > 0:
@@ -148,7 +149,13 @@ class Measures(SonarObject):
         return columns, data
 
     def _write_csv(self):
-        output_path = Path(self._output_path).joinpath("measures")
+
+        # Condition: query measures data for component file in the project
+        if self.__project_key != self.__component_key:
+            output_path = Path(self._output_path).joinpath("measures").joinpath(get_proper_file_name(self.__project_key))
+        else:
+            output_path = Path(self._output_path).joinpath("measures")
+
         output_path.mkdir(parents=True, exist_ok=True)
         file_path = output_path.joinpath(f"{self.__file_name}_staging.csv")
 

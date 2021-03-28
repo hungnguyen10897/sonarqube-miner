@@ -54,24 +54,25 @@ def get_creation_analysis_key(issue_key, creation_date, issue_key_analysis_map, 
     return issue_key_analysis_map[issue_key]
 
 class Issues(SonarObject):
-    def __init__(self, server, organization, output_path, project_key, analysis_keys_dates, rules):
+    def __init__(self, server, organization, output_path, project_key, component_key, component_name, analysis_keys_dates, rules):
         SonarObject.__init__(
             self,
             endpoint = server + "api/issues/search",
             params = {
                 'p': 1,                         # varialbe
                 'ps': ISSUES_PAGE_SIZE,
-                'componentKeys': project_key,
+                'componentKeys': component_key,
             },
             output_path = output_path
         )
 
         self.__organizaiton = organization
         self.__project_key = project_key
+        self.__component_key = component_key
         # dates are in decreasing order
         self.__analysis_keys_dates = list(zip(analysis_keys_dates[0], analysis_keys_dates[1]))
         self._element_list = []
-        self.__file_name = get_proper_file_name(self.__project_key)
+        self.__file_name = get_proper_file_name(component_name)
         self.__rules = rules
 
     def _more_elements(self, issues_num):
@@ -134,7 +135,12 @@ class Issues(SonarObject):
 
     def __get_old_issues_df(self):
 
-        issues_archive_file_path = Path(self._output_path).joinpath("issues").joinpath(f"{self.__file_name}.csv")
+        # Condition: query issues data for component file in the project
+        if self.__project_key != self.__component_key:
+            issues_archive_file_path = Path(self._output_path).joinpath("issues").joinpath(get_proper_file_name(self.__project_key)).joinpath(f"{self.__file_name}.csv") 
+        else:
+            issues_archive_file_path = Path(self._output_path).joinpath("issues").joinpath(f"{self.__file_name}.csv") 
+
         if not issues_archive_file_path.exists():
             return None
         
@@ -152,11 +158,17 @@ class Issues(SonarObject):
             print("\tNo issues queried.")
             return
 
-        issues = []
-        output_path = Path(self._output_path).joinpath("issues")
+        # Condition: query issues data for component file in the project
+        if self.__project_key != self.__component_key:
+            output_path = Path(self._output_path).joinpath("issues").joinpath(get_proper_file_name(self.__project_key))
+        else:
+            output_path = Path(self._output_path).joinpath("issues")
+
         output_path.mkdir(parents=True, exist_ok=True)
         
         file_path = output_path.joinpath(f"{self.__file_name}_staging.csv")
+    
+        issues = []
 
         for project_issue in self._element_list:
 
