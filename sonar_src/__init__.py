@@ -1,13 +1,13 @@
-from sonar_src.sonar_project import Projects
-from sonar_src.sonar_metric import Metrics
-from sonar_src.sonar_analysis import Analyses
-from sonar_src.sonar_measure import Measures
-from sonar_src.sonar_issue import Issues
-from sonar_src.sonar_rule import Rules
-from sonar_src.sonar_component_project import ComponentProject
-from sonar_src.sonar_file import Files
-
 import sys
+
+from .sonar_project import Projects
+from .sonar_metric import Metrics
+from .sonar_analysis import Analyses
+from .sonar_measure import Measures
+from .sonar_issue import Issues
+from .sonar_rule import Rules
+from .sonar_component_project import ComponentProject
+from .sonar_file import Files
 
 def fetch_organization_sonar_data(output_path, organization = 'apache', server = "https://sonarcloud.io/", component_wise=False):
 
