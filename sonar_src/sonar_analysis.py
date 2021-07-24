@@ -2,8 +2,8 @@ from collections import OrderedDict
 import pandas as pd
 from pathlib import Path
 
-from sonar_src.sonar_object import SonarObject
-from sonar_src.utils import process_datetime, get_proper_file_name
+from .sonar_object import SonarObject
+from .utils import process_datetime, get_proper_file_name
 
 SONAR_ANALYSES_DTYPE = OrderedDict({
         "organization": "object",

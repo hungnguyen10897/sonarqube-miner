@@ -1,4 +1,4 @@
-from sonar_src.sonar_object import SonarObject
+from .sonar_object import SonarObject
 
 class Rules(SonarObject):
 

@@ -1,8 +1,8 @@
 import pandas as pd
 from pathlib import Path
 
-from sonar_src.sonar_object import SonarObject
-from sonar_src.route_config import RequestsConfig
+from .sonar_object import SonarObject
+from .route_config import RequestsConfig
 
 class Files(SonarObject):
     def __init__(self, server, project_key):

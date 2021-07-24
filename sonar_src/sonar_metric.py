@@ -2,9 +2,9 @@ import pandas as pd
 from pathlib import Path
 from collections import OrderedDict
 
-from sonar_src.sonar_object import SonarObject
-from sonar_src.route_config import RequestsConfig
-from sonar_src.utils import read_used_metrics
+from .sonar_object import SonarObject
+from .route_config import RequestsConfig
+from .utils import read_used_metrics
 
 TYPE_CONVERSION = {
     "INT": "Int64",
